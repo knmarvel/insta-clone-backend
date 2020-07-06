@@ -57,6 +57,8 @@ class Author(AbstractBaseUser):
     active = models.BooleanField(default=True)
     staff = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)
+    age = models.FloatField(null=True, blank=True)
+    birthdate = models.DateField(auto_now=False, auto_now_add=False, null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'name']
