@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'insta_backend',
     'authentication',
-    'notification'
+    'notification',
+    'comments',
+    'likes',
 ]
 
 MIDDLEWARE = [
