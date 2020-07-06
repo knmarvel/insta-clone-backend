@@ -49,7 +49,7 @@ class Author(AbstractBaseUser):
     bio = models.TextField(max_length=280)
     name = models.CharField(max_length=50)
     username = models.CharField(max_length=50, unique=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField()
     website = models.URLField()
     email = models.EmailField(max_length=100, unique=True)
     gender = models.CharField(max_length=20)
