@@ -125,7 +125,9 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    '/Users/nynaeve/Kenzie/insta-clone-backend/post_uploads',
+    '/Users/darveloper/Desktop/Kenzie Academy/insta-clone-backend/post_uploads',
 ]
 AUTH_USER_MODEL ='authentication.Author'
-LOGIN_URL = 'login/'
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGOUT_REDIRECT_URL = 'login'

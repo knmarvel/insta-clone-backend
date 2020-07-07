@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1 class='display-4 mt-4 text-center'>Feed</h1>
+<h2>{{request.user.username}}'s Profile</h2>
 {% if posts %}
 {% for post in posts %}
 {% load static %}
@@ -10,7 +10,5 @@
     with the caption, "{{ post.caption }}"
     <br>
 {% endfor %}
-{% else %}
-"no posts"
 {% endif %}
 {% endblock %}
