@@ -12,6 +12,7 @@ class Post(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(
         'authentication.Author',
+        blank=True,
         related_name="authors_who_like_this"
         )
 

@@ -121,7 +121,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    '/Users/nynaeve/Kenzie/insta-clone-backend/post_uploads',
+]
 AUTH_USER_MODEL ='authentication.Author'
 LOGIN_URL = 'login/'
