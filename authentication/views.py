@@ -16,11 +16,18 @@ def register_view(request):
     if request.method == 'POST':
         form = RegisterForm(data=request.POST)
         if form.is_valid():
-            user = form.save()
-            user.set_password(password=password)
+            user = Author.objects.create_user(
+                username=form.cleaned_data['username'],
+                name=form.cleaned_data['name'],
+                email=form.cleaned_data['email'],
+                password=form.cleaned_data['password1']
+            )
+            user.is_Active = True
             user.save()
-
-    form = RegisterForm()
+            login(request, user)
+            return HttpResponseRedirect(reverse('home'))
+    else:
+        form = RegisterForm()
     return render(request, 'register.html', {'form': form})
 
 
@@ -28,12 +35,12 @@ def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            email = form.cleaned_data.get('email')
+            username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            user = authenticate(email=email, password=password)
-            if user is not None:
+            user = authenticate(username=username, password=password)
+            if user:
                 login(request, user)
-                return HttpResponseRedirect(reverse('/'))
+                return HttpResponseRedirect(request.GET.get('next', reverse('home')))
     form = LoginForm()
     return render(request, 'login.html', {'form': form})
 def logout_view(request):

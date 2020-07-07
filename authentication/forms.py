@@ -10,8 +10,10 @@ class RegisterForm(UserCreationForm):
     class Meta:
         model = Author
         fields = [
+            'name',
             'username',
-            'email'
+            'email',
+            
         ]
     
 
