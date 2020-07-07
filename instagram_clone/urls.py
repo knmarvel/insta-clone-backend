@@ -16,8 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from authentication.urls import urlpatterns as auth_urls
+from insta_backend.urls import urlpatterns as post_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     
 ]
-urlpatterns += auth_urls
+urlpatterns += auth_urls + post_urls
