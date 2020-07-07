@@ -8,6 +8,7 @@ authors = ["Darveloper <darveloper@gmail.com>"]
 python = "^3.8"
 django = "^3.0.8"
 Pillow = "^7.2.0"
+bootstrap4 = "^0.1.0"
 
 [tool.poetry.dev-dependencies]
 
