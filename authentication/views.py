@@ -3,7 +3,8 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from .forms import RegisterForm, LoginForm
 from .models import Author
-from django.contrib import messages
+from insta_backend.models import Post
+from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 
 
@@ -35,14 +36,20 @@ def login_view(request):
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
             if user:
-                login(request, user)
+                auth.login(request, user)
                 return HttpResponseRedirect(request.GET.get('next', reverse('home')))
     form = LoginForm()
     return render(request, 'login.html', {'form': form})
 def logout_view(request):
-    logout(request)
-    return redirect('/login')
+    
+    auth.logout(request)
+    return redirect('login')
 
 def profile_view(request, id):
-    user = Author.objects.get(id=id)
-    return render(request, 'profile.html', {'user': user})
+    profile = Author.objects.get(id=id)
+    posts = Post.objects.filter(author=request.user)
+    context = {
+            "profile": profile,
+            "posts":posts
+        }
+    return render(request, 'profile.html', context)
