@@ -59,6 +59,10 @@ class Author(AbstractBaseUser):
     admin = models.BooleanField(default=False)
     age = models.FloatField(null=True, blank=True)
     birthdate = models.DateField(auto_now=False, auto_now_add=False, null=True, blank=True)
+    following = models.ManyToManyField(
+        'self',
+        related_name="following"
+    )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'name']
