@@ -64,11 +64,11 @@ class Author(AbstractBaseUser):
         related_name="following"
     )
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'name']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email', 'name']
 
     def __str__(self):
-        return self.email
+        return self.username
     
     def has_perm(self, perm, obj=None):
         return True
@@ -77,10 +77,10 @@ class Author(AbstractBaseUser):
         return True
 
     def get_full_name(self):
-        return self.email
+        return self.username
 
     def get_short_name(self):
-        return self.email
+        return self.username
 
     @property
     def is_staff(self):
