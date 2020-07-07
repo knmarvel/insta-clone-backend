@@ -11,7 +11,7 @@ class AuthorAdmin(BaseUserAdmin):
     list_display = ('name', 'username', 'admin')
     list_filter = ('admin',)
     fieldsets = (
-        (None, {'fields': ('username', 'email', 'password')}),
+        (None, {'fields': ('username', 'email', 'password', 'following')}),
         ('Personal info', {'fields': ()}),
         ('Permissions', {'fields': ('admin',)}),
     )
