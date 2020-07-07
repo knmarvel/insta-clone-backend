@@ -47,4 +47,6 @@ def logout_view(request):
     logout(request)
     return redirect('/login')
 
-
+def profile_view(request, id):
+    user = Author.objects.get(id=id)
+    return render(request, 'profile.html', {'user': user})

@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Home</h1>
-<h2>Welcome <a href="/user/{{request.user.id}}">{{request.user.username}}</a></h2>
+<h2>{{request.user.username}}'s Profile</h2>
 {% if posts %}
 {% for post in posts %}
 {% load static %}
