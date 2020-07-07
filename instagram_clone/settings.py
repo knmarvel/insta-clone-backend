@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'authentication',
     'notification',
     'comments',
+    'bootstrap4',
 ]
 
 MIDDLEWARE = [
