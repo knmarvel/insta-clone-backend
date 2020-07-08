@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserCreationForm
-from .models import Author
+from .models import Author, Profile
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=100)
@@ -18,8 +18,8 @@ class RegisterForm(UserCreationForm):
 
 class ProfileEditForm(forms.ModelForm):
     class Meta:
-        model = Author
-        fields = ['username', 'bio', 'website', 'gender', 'profile_picture', 'birthdate']
+        model = Profile
+        fields = ['bio', 'website', 'gender', 'profile_picture', 'birthdate']
 
 
 class AuthorAdminCreationForm(forms.ModelForm):
@@ -50,7 +50,14 @@ class AuthorAdminChangeForm(forms.ModelForm):
 
     class Meta:
         model = Author
-        fields = ('username', 'email', 'password', 'active', 'admin')
+        fields = '__all__'
     
     def clean_password(self):
         return self.initial["password"]
+
+    def __init__(self, *args, **kwargs):
+        super(AuthorAdminChangeForm, self).__init__(*args, **kwargs)
+        f = self.fields.get('user_permissions', None)
+        if f is not None:
+            f.queryset = f.queryset.select_related('content_type')
+

@@ -2,25 +2,10 @@
 {% block content %}
 <h3>Edit Profile</h3>
 <div class="content-section">
-  <div class="media">
-    {% comment %} <img
-      src="{{user.profile.image.url}}"
-      alt=""
-      class="rounded-circle account-img"
-    /> {% endcomment %}
 
-    <div class="media-body">
-      <h2 class="account-heading">{{user.username}}</h2>
-      <p class="text-secondary">{{user.email}}</p>
-    </div>
-  </div>
-  <form action="{% url 'profile' slug=request.user.username %}" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <fieldset class="form-group">
-      <legend class="border-bottom mb-4">Profile Info</legend>
+  <form action="{% url 'profile' slug=request.user.username %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+      {% csrf_token %}
       {{form.as_p }}
-    </fieldset>
-    <div class="form-group">
       <button class="btn btn-primary" type="submit">Update Profile</button>
     </div>
   </form>

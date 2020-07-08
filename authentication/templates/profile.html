@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>{{profile.slug}}'s Profile</h2>
+<h2>{{ user }}'s Profile</h2>
 <a href={% url 'edit_profile' slug=request.user.username%}><button>Edit Profile</button></a>
-<h3>Bio: {{user.bio}}</h3>
+<h3>Name: {{profile.username}}</h3>
+
+<h3>Email: {{profile.bio}}</h3>
 {% if posts %}
 {% for post in posts %}
 {% load static %}
