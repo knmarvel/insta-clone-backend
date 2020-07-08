@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserCreationForm
+from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserCreationForm, UserChangeForm
 from .models import Author, Profile
 
 class LoginForm(forms.Form):
@@ -45,19 +45,12 @@ class AuthorAdminCreationForm(forms.ModelForm):
             author.save()
         return author
 
-class AuthorAdminChangeForm(forms.ModelForm):
+class AuthorAdminChangeForm(UserChangeForm):
     password = ReadOnlyPasswordHashField()
 
     class Meta:
         model = Author
-        fields = '__all__'
+        fields = ('name', 'username', 'email')
     
-    def clean_password(self):
-        return self.initial["password"]
-
-    def __init__(self, *args, **kwargs):
-        super(AuthorAdminChangeForm, self).__init__(*args, **kwargs)
-        f = self.fields.get('user_permissions', None)
-        if f is not None:
-            f.queryset = f.queryset.select_related('content_type')
+    
 

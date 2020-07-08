@@ -68,7 +68,7 @@ def profile_edit_view(request, slug):
         form = AuthorAdminChangeForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('profile')
+        return redirect('profile')
     else:
         form = AuthorAdminChangeForm(instance=request.user)
         context = {'form': form }
