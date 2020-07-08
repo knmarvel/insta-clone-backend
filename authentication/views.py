@@ -20,6 +20,7 @@ def register_view(request):
                 password=form.cleaned_data['password1']
             )
             user.is_Active = True
+            user.following.add(user)
             user.save()
             login(request, user)
             return HttpResponseRedirect(reverse('home'))

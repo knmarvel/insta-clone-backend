@@ -87,7 +87,6 @@ class Author(AbstractBaseUser):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.username)
-        self.following.add(self)
         return super().save(*args, **kwargs)
 
     @property
