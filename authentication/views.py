@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponseRedirect, reverse
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, ProfileEditForm
 from .models import Author
 from insta_backend.models import Post
 from django.contrib import messages, auth
@@ -48,6 +48,7 @@ def logout_view(request):
 
 def profile_view(request, slug):
     profile = Author.objects.get(slug=slug)
+    
     print(profile)
     posts = Post.objects.filter(author=profile)
     context = {
@@ -55,3 +56,16 @@ def profile_view(request, slug):
             "posts":posts
         }
     return render(request, 'profile.html', context)
+
+def profile_edit_view(request, slug):
+    current_user = Author.objects.get(slug=slug)
+    form = ProfileEditForm()
+    print(current_user)
+    if request.method == 'POST':
+        form = ProfileEditForm(
+            request.POST, request.FILES, instance=request.user
+        )
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('edit_profile'))
+    return render(request, 'edit_profile.html', {'form': form})

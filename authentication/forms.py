@@ -15,7 +15,12 @@ class RegisterForm(UserCreationForm):
             'email',
             
         ]
-    
+
+class ProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = Author
+        fields = ['username', 'bio', 'website', 'gender', 'profile_picture', 'birthdate']
+
 
 class AuthorAdminCreationForm(forms.ModelForm):
 
