@@ -9,7 +9,8 @@ class Post(models.Model):
     )
     image = models.ImageField(upload_to='post_uploads/')
     caption = models.TextField(max_length=500)
-    timestamp = models.DateTimeField(auto_now=True)
+    created_timestamp = models.DateTimeField()
+    updated_timestamp = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(
         'authentication.Author',
         blank=True,

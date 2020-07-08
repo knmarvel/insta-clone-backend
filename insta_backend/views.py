@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.http import Http404
+from datetime import datetime as dt
 from django.views import View
 from insta_backend.models import Post
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -18,7 +19,7 @@ class Homepage(View):
                 author__in=request.user.following.all())
         else:
             posts = Post.objects.all()
-        posts.order_by('timestamp')
+        posts = posts.order_by('-created_timestamp')
         return render(request, self.html, {'posts': posts})
 
 
@@ -33,10 +34,13 @@ class PostAdd(LoginRequiredMixin, CreateView):
     fields = ['image', 'caption']
 
     def form_valid(self, form):
+        """Gives the user authorship of the new post"""
         form.instance.author = self.request.user
+        form.instance.creation_timestamp = dt.now()
         return super().form_valid(form)
 
     def get_success_url(self):
+        """Sends user back to homepage after post"""
         return reverse_lazy('home')
 
 
@@ -51,3 +55,13 @@ class PostDelete(LoginRequiredMixin, DeleteView):
             raise Http404
 
     success_url = reverse_lazy('home')
+
+
+def post_toggle_like(request, pk):
+    post = Post.objects.get(id=pk)
+    if request.user in post.likes.all():
+        post.likes.remove(request.user)
+    else:
+        post.likes.add(request.user)
+    post.save()
+    return HttpResponseRedirect(request.GET.get('next', reverse('home')))
