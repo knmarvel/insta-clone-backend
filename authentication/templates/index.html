@@ -1,16 +1,22 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1 class='display-4 mt-4 text-center'>Feed</h1>
-{% if posts %}
-{% for post in posts %}
-{% load static %}
-    <img src="{% static post.image.url|slice:"13:" %}"/>
-    posted by {{ post.author.username }}
-    at {{ post.timestamp }}
-    with the caption, "{{ post.caption }}"
-    <br>
-{% endfor %}
-{% else %}
-"no posts"
-{% endif %}
+    <div class="feed">
+    <h1 class='display-4 mt-4 text-center'>Feed</h1>
+    {% if posts %}
+        <div class="card-group">
+        {% for post in posts %}
+            <div class="card" style="width: 18rem;">
+            {% load static %}
+                <img class="card-img-top" src="{% static post.image.url|slice:"13:" %}"/>
+                <h5 class="card-title">@<a href={% url 'profile' slug=post.author.slug %}>{{ post.author.username }}</a>, {{ post.timestamp }}</h5>
+                <p class="card-text">"{{ post.caption }}"</p>
+                <a href="#" class="card-link">Like</a> Likes do not yet function
+                <br>
+            </div>
+        {% endfor %}
+        {% else %}
+        "no posts"
+    {% endif %}
+    </div>
+    </div>
 {% endblock %}
