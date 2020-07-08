@@ -15,3 +15,9 @@ class Homepage(View):
             posts = Post.objects.all()
         
         return render(request, self.html, {'posts': posts})
+
+
+def post_detail(request, id):
+    html = "post_detail.html"
+    post = Post.objects.get(id=id)
+    return render(request, html, {'post': post})

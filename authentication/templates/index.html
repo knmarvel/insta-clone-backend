@@ -9,14 +9,15 @@
             {% load static %}
                 <img class="card-img-top" src="{% static post.image.url|slice:"13:" %}"/>
                 <h5 class="card-title">@<a href={% url 'profile' slug=post.author.slug %}>{{ post.author.username }}</a>, {{ post.timestamp }}</h5>
-                <p class="card-text">"{{ post.caption }}"</p>
+                <p class="card-text"><a href={% url 'post_detail' id=post.id %}>"{{ post.caption|slice:":20" }} {% if post.caption.count > 20 %}[...view more] {%endif%}"</a></p>
                 <a href="#" class="card-link">Like</a> Likes do not yet function
                 <br>
             </div>
         {% endfor %}
         {% else %}
         <div class="card" style="width: 18rem;">
-            <p> No one you're following has any posts :( </p>
+            <h5 class="card-title"> :( </h5>
+            <p> No one you're following has any posts </p>
         </div>
     {% endif %}
     </div>
