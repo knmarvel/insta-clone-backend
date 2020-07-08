@@ -6,6 +6,9 @@
         <h5 class="card-title">@<a href={% url 'profile' slug=post.author.slug %}>{{ post.author.username }}</a>, {{ post.timestamp }}</h5>
         <p class="card-text">"{{ post.caption }}"</p>
         <a href="#" class="card-link">Like</a> Likes do not yet function
+        {% if post.author == request.user %}
+        <a href="delete"><button>Delete this post</button></a>
+        {% endif %}
         <br>
     </div>
 {% endblock %}
