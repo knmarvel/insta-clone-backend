@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>{{request.user.username}}'s Profile</h2>
+<h2>{{profile.slug}}'s Profile</h2>
 {% if posts %}
 {% for post in posts %}
 {% load static %}
