@@ -20,6 +20,7 @@ def register_view(request):
                 password=form.cleaned_data['password1']
             )
             user.is_Active = True
+            user.following.add(user)
             user.save()
             login(request, user)
             return HttpResponseRedirect(reverse('home'))
@@ -45,9 +46,10 @@ def logout_view(request):
     auth.logout(request)
     return redirect('login')
 
-def profile_view(request, id):
-    profile = Author.objects.get(id=id)
-    posts = Post.objects.filter(author=request.user)
+def profile_view(request, slug):
+    profile = Author.objects.get(slug=slug)
+    print(profile)
+    posts = Post.objects.filter(author=profile)
     context = {
             "profile": profile,
             "posts":posts

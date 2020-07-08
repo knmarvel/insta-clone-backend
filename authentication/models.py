@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
+from django.template.defaultfilters import slugify
+
 
 
 class AuthorManager(BaseUserManager):
@@ -49,7 +51,7 @@ class Author(AbstractBaseUser):
     bio = models.TextField(max_length=280)
     name = models.CharField(max_length=50)
     username = models.CharField(max_length=50, unique=True)
-    slug = models.SlugField()
+    slug = models.SlugField(null=False, unique=True)
     website = models.URLField()
     email = models.EmailField(max_length=100, unique=True)
     gender = models.CharField(max_length=20)
@@ -81,6 +83,11 @@ class Author(AbstractBaseUser):
 
     def get_short_name(self):
         return self.username
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.username)
+        return super().save(*args, **kwargs)
 
     @property
     def is_staff(self):

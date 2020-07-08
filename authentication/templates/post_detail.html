@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card" style="width: 18rem;">
+    {% load static %}
+        <img class="card-img-top" src="{% static post.image.url|slice:"13:" %}"/>
+        <h5 class="card-title">@<a href={% url 'profile' slug=post.author.slug %}>{{ post.author.username }}</a>, {{ post.timestamp }}</h5>
+        <p class="card-text">"{{ post.caption }}"</p>
+        <a href="#" class="card-link">Like</a> Likes do not yet function
+        <br>
+    </div>
+{% endblock %}
