@@ -5,7 +5,7 @@ from django.db import models
 class Post(models.Model):
     author = models.ForeignKey(
         'authentication.Author',
-        on_delete= models.CASCADE
+        on_delete=models.CASCADE
     )
     image = models.ImageField(upload_to='post_uploads/')
     caption = models.TextField(max_length=500)
