@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "/Users/nynaeve/Library/Caches/pypoetry/virtualenvs/insta-clone-backend-Wqb8XU63-py3.8/bin/python",
-    "python.linting.enabled": true,
+    "python.pythonPath": "/Users/darveloper/.pyenv/versions/3.8.2/bin/python",
+    "python.linting.enabled": false,
     "python.linting.flake8Enabled": true
 }
