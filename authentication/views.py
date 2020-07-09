@@ -50,7 +50,7 @@ def logout_view(request):
 def profile_view(request, slug):
     
     user = Author.objects.get(username=slug)
-    profile = Profile.objects.get(user=user)
+    profile = Profile.objects.filter(user=user).first()
     print(profile)
     print(user)
     
@@ -67,7 +67,7 @@ def profile_view(request, slug):
 @login_required
 def profile_edit_view(request, slug):
     user = Author.objects.get(username=slug)
-    profile = Profile.objects.get(user=user)
+    profile = Profile.objects.filter(user=user).first()
     if request.method == 'POST':
         form = AuthorAdminChangeForm(request.POST, instance=profile)
         if form.is_valid():

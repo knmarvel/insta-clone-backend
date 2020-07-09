@@ -27,7 +27,7 @@
                 <a class="nav-item nav-link" href="{% url 'profile' slug=request.user.username%}">Profile</a>
                 <a class="nav-item nav-link" href="/logout/">Logout</a>
                 {% else %}
-                {% comment %} <a class="nav-item nav-link" href="{% url 'login' %}">Login</a> {% endcomment %}
+                <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
                 {% endif %}
                 
             </div>
