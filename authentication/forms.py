@@ -49,8 +49,8 @@ class AuthorAdminChangeForm(UserChangeForm):
     password = ReadOnlyPasswordHashField()
 
     class Meta:
-        model = Author
-        fields = ('name', 'username', 'email')
+        model = Profile
+        exclude = ('user', 'password')
     
     
 

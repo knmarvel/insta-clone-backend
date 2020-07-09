@@ -48,11 +48,14 @@ def logout_view(request):
     return redirect('login')
 
 def profile_view(request, slug):
-    profile = Author.objects.get(username=slug)
-    user = request.user
+    
+    user = Author.objects.get(username=slug)
+    profile = Profile.objects.get(user=user)
     print(profile)
     print(user)
-    posts = Post.objects.filter(author=profile)
+    
+    
+    posts = Post.objects.filter(author=user)
     
     context = {
             "profile": profile,
@@ -63,13 +66,15 @@ def profile_view(request, slug):
 
 @login_required
 def profile_edit_view(request, slug):
-    profile = Author.objects.get(username=slug)
+    user = Author.objects.get(username=slug)
+    profile = Profile.objects.get(user=user)
     if request.method == 'POST':
-        form = AuthorAdminChangeForm(request.POST, instance=request.user)
+        form = AuthorAdminChangeForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
-        return redirect('profile')
+            print("the form should be saving now")
+        return redirect('/')
     else:
-        form = AuthorAdminChangeForm(instance=request.user)
+        form = AuthorAdminChangeForm(instance=profile)
         context = {'form': form }
     return render(request, 'edit_profile.html', context)

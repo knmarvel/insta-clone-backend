@@ -105,10 +105,10 @@ class Author(AbstractBaseUser):
 class Profile(models.Model):
     user = models.ForeignKey(Author, on_delete=models.CASCADE)
     bio = models.TextField(max_length=280, blank=True)
-    website = models.URLField()
-    gender = models.CharField(max_length=20)
+    website = models.URLField(blank=True, null=True)
+    gender = models.CharField(max_length=20, blank=True, null=True)
     profile_picture = models.ImageField(null=True, blank=True)
-    location = models.CharField(max_length=30, blank=True)
+    location = models.CharField(max_length=30, blank=True, null=True)
     birthdate = models.DateField(auto_now=False, auto_now_add=False, null=True, blank=True)
 
     def __str__(self):
