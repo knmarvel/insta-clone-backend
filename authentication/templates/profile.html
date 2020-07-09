@@ -10,10 +10,13 @@
 <a href={% url 'edit_profile' slug=request.user.username%}><button>Edit Profile</button></a>
 {% endif %}
 <h3>Name: {{user.username}}</h3>
+{{profile.profile_picture}}
+
 
 <h3>Email: {{user.email}}</h3>
 <h3>Bio: {{profile.bio}}</h3>
 <h4>Website: {{profile.website}}</h4>
+{{profile.profile_picture}}
 <h4>Gender: {{profile.gender}}</h4>
 <h4>Location: {{profile.location}}</h4>
 <h4>Birthday: {{profile.birthdate}}</h4>
