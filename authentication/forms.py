@@ -1,6 +1,6 @@
 from django import forms
-from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserCreationForm
-from .models import Author
+from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserCreationForm, UserChangeForm
+from .models import Author, Profile
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=100)
@@ -15,7 +15,12 @@ class RegisterForm(UserCreationForm):
             'email',
             
         ]
-    
+
+class ProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['bio', 'website', 'gender', 'profile_picture', 'birthdate']
+
 
 class AuthorAdminCreationForm(forms.ModelForm):
 
@@ -40,12 +45,12 @@ class AuthorAdminCreationForm(forms.ModelForm):
             author.save()
         return author
 
-class AuthorAdminChangeForm(forms.ModelForm):
+class AuthorAdminChangeForm(UserChangeForm):
     password = ReadOnlyPasswordHashField()
 
     class Meta:
-        model = Author
-        fields = ('username', 'email', 'password', 'active', 'admin')
+        model = Profile
+        exclude = ('user', 'password')
     
-    def clean_password(self):
-        return self.initial["password"]
+    
+

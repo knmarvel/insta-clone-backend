@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect, HttpResponseRedirect, reverse
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib.auth import authenticate, login, logout
-from .forms import RegisterForm, LoginForm
-from .models import Author
+from .forms import RegisterForm, LoginForm, ProfileEditForm, AuthorAdminChangeForm
+from .models import Author, Profile
 from insta_backend.models import Post
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
+
 
 
 
@@ -47,11 +48,33 @@ def logout_view(request):
     return redirect('login')
 
 def profile_view(request, slug):
-    profile = Author.objects.get(slug=slug)
+    
+    user = Author.objects.get(username=slug)
+    profile = Profile.objects.filter(user=user).first()
     print(profile)
-    posts = Post.objects.filter(author=profile)
+    print(user)
+    
+    
+    posts = Post.objects.filter(author=user)
+    
     context = {
             "profile": profile,
-            "posts":posts
+            "posts":posts,
+            "user": user
         }
     return render(request, 'profile.html', context)
+
+@login_required
+def profile_edit_view(request, slug):
+    user = Author.objects.get(username=slug)
+    profile = Profile.objects.filter(user=user).first()
+    if request.method == 'POST':
+        form = AuthorAdminChangeForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            print("the form should be saving now")
+        return redirect('/')
+    else:
+        form = AuthorAdminChangeForm(instance=profile)
+        context = {'form': form }
+    return render(request, 'edit_profile.html', context)
