@@ -52,20 +52,17 @@ def profile_view(request, slug):
     
     user = Author.objects.get(username=slug)
     profile = Profile.objects.filter(user=user).first()
-    logged_in_user = Author.objects.get(id=request.user.id)
-    is_following = logged_in_user.following.filter(username=slug).exists()
-    print(profile)
-    print(user)
-    
-    
     posts = Post.objects.filter(author=user)
     
     context = {
             "profile": profile,
             "posts":posts,
-            "user": user,
-            "is_following": is_following
+            "user": user
         }
+    if request.user.is_authenticated: 
+        logged_in_user = Author.objects.get(id=request.user.id)
+        is_following = logged_in_user.following.filter(username=slug).exists()
+        context["is_following"] = is_following
     return render(request, 'profile.html', context)
 
 @login_required
