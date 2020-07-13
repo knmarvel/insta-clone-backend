@@ -1,20 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
     {% if request.user.is_authenticated %}
-    <div >
-        <a href="post/add/"><button>Create a new post</button></a>
-    </div>
     {% endif %}
     <div class="feed" style="margin-bottom: 10rem;">
-    <h1 class='display-4 mt-4 text-center'>Feed</h1>
+    <h1 class='display-4 mt-4 text-center' style="color: #016064;">The Feed</h1>
     {% if posts %}
         <div class="card-columns">
         {% for post in posts %}
             <div class="card" style="width: 18rem;">
             {% load static %}
                 <img class="card-img-top" style="object-fit: cover; height: 18rem;" src="{{ post.image.url }}"/>
-                <h5 class="card-title">@<a href={% url 'profile' slug=post.author.slug %}>{{ post.author.username }}</a>, {{ post.created_timestamp }}</h5>
+                <h5 class="lead card-title">@<a style="color: #016064" href={% url 'profile' slug=post.author.slug %}>{{ post.author.username }}</a></h5>
                 <p class="card-text"><a href={% url 'post_detail' id=post.id %}>"{{ post.caption|slice:":20" }}{% if post.caption.count > 20 %}...view more{%endif%}"</a></p>
+                <footer class="blockquote-footer">{{ post.created_timestamp }}</footer>
                 <a href="{% url 'post-like' pk=post.pk %}" class="card-link">
                     {% if post.likes.count > 0%}
                     {{post.likes.count}}
