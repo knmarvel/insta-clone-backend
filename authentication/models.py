@@ -103,16 +103,17 @@ class Author(AbstractBaseUser):
     objects = AuthorManager()
 
 class Profile(models.Model):
-    user = models.ForeignKey(Author, on_delete=models.CASCADE)
+    user = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='profile')
     bio = models.TextField(max_length=280, blank=True)
     website = models.URLField(blank=True, null=True)
     gender = models.CharField(max_length=20, blank=True, null=True)
-    profile_picture = models.ImageField(null=True, blank=True)
+    profile_picture = models.ImageField(null=True, blank=True, default='default.png', upload_to='profile_uploads')
     location = models.CharField(max_length=30, blank=True, null=True)
     birthdate = models.DateField(auto_now=False, auto_now_add=False, null=True, blank=True)
 
     def __str__(self):
         return self.user.name
+    
 
 @receiver(post_save, sender=Author)
 def create_author_profile(sender, instance, created, **kwargs):
