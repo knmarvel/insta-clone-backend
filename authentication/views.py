@@ -7,7 +7,7 @@ from insta_backend.models import Post
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django.views.generic.list import ListView
-
+from django.db.models import Q
 
 
 
@@ -94,3 +94,12 @@ class SearchView(ListView):
        else:
            result = None
        return result
+
+def search_view(request):
+    template = 'search.html'
+    query = request.GET.get('q')
+    results = Author.objects.filter(Q(username__icontains=query))
+    context = {
+        'results': results
+    }
+    return render(request, template, context)
