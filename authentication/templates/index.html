@@ -10,7 +10,7 @@
         {% for post in posts %}
             <div class="card" style="width: 18rem;">
             {% load static %}
-                <img class="card-img-top" style="object-fit: cover; height: 18rem;" src="{% static post.image.url|slice:"13:" %}"/>
+                <img class="card-img-top" style="object-fit: cover; height: 18rem;" src="{{ post.image.url }}"/>
                 <h5 class="card-title">@<a href={% url 'profile' slug=post.author.slug %}>{{ post.author.username }}</a>, {{ post.created_timestamp }}</h5>
                 <p class="card-text"><a href={% url 'post_detail' id=post.id %}>"{{ post.caption|slice:":20" }}{% if post.caption.count > 20 %}...view more{%endif%}"</a></p>
                 <a href="{% url 'post-like' pk=post.pk %}" class="card-link">

@@ -70,7 +70,7 @@ def profile_edit_view(request, slug):
     user = Author.objects.get(username=slug)
     profile = Profile.objects.filter(user=user).first()
     if request.method == 'POST':
-        form = AuthorAdminChangeForm(request.POST, instance=profile)
+        form = AuthorAdminChangeForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
             print("the form should be saving now")
