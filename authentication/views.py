@@ -52,10 +52,6 @@ def profile_view(request, slug):
     
     user = Author.objects.get(username=slug)
     profile = Profile.objects.filter(user=user).first()
-    print(profile)
-    print(user)
-    
-    
     posts = Post.objects.filter(author=user)
     
     context = {
@@ -63,6 +59,10 @@ def profile_view(request, slug):
             "posts":posts,
             "user": user
         }
+    if request.user.is_authenticated: 
+        logged_in_user = Author.objects.get(id=request.user.id)
+        is_following = logged_in_user.following.filter(username=slug).exists()
+        context["is_following"] = is_following
     return render(request, 'profile.html', context)
 
 @login_required
@@ -103,3 +103,17 @@ def search_view(request):
         'results': results
     }
     return render(request, template, context)
+
+def follow_view(request, slug):
+    user_follow = Author.objects.get(username=slug)
+    logged_in_user = Author.objects.get(id=request.user.id)
+    logged_in_user.following.add(user_follow)
+    print(user_follow)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def unfollow_view(request, slug):
+    user_unfollow = Author.objects.get(username=slug)
+    logged_in_user = Author.objects.get(id=request.user.id)
+    logged_in_user.following.remove(user_unfollow)
+    print(user_unfollow)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

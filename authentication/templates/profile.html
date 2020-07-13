@@ -1,45 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
 
-
-{% comment %} <h3>Name: {{user.username}}</h3>
-{{profile.profile_picture}} {% endcomment %}
-{% comment %} 
-<div class="container emp-profile">
-
-  <h2 class='display-4 text-center' style='color:#016064;'>Feed</h2>
-  
-  <div class="card-columns">
-      <div class="card" style="width: 15rem; height: auto">
-    {% load static %}
-    <img src="https://via.placeholder.com/150" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">{{user.slug}}</h5>
-            <p class="card-text">Bio: {{profile.bio}}</p>
-            <p class="card-text">Website: {{profile.website}}</p>
-            <p class="card-text">Gender: {{profile.gender}}</p>
-            <p class="card-text">Location: {{profile.location}}</p>
-            <p class="card-text">Birthday: {{profile.birthdate}}</p>
-            <a href={% url 'edit_profile' slug=request.user.username%} class="btn btn-primary" style='background-color: #016064'>Edit Profile</a>
-        </div>
-    </div>
-    {% if posts %}
-    {% for post in posts%}
-    <div class="card" style="width:auto;">
-    <img src="{% static post.image.url|slice:"13:" %}"/>
-      <div class="card-body text-center">
-        <footer class="blockquote-footer" style='color:#016064;'>{{post.caption}}</footer>
-        
-      </div>
-
-      
-    </div>
-    
-    {% endfor %}
-    {% endif %}
-  </div>
-</div> {% endcomment %}
-
 <div class='container-fluid mt-3'>
     <div class='row'>
         <div class='col-sm-3'>
@@ -53,7 +14,20 @@
                     <p class="card-text">Gender: {{profile.gender}}</p>
                     <p class="card-text">Location: {{profile.location}}</p>
                     <p class="card-text">Birthday: {{profile.birthdate}}</p>
-                    <a href={% url 'edit_profile' slug=request.user.username%} class="btn btn-primary" style='background-color: #016064'>Edit Profile</a>
+                    {% if request.user.is_authenticated %}
+                    {% if request.user.username == user.slug %}
+                        <a href={% url 'edit_profile' slug=request.user.username%} class="btn btn-primary" style='background-color: #016064'>Edit Profile</a>
+                                          
+                    {% endif %}
+                    {% if not is_following %}
+                       <a href={% url 'follow' slug=user.slug %} class="btn btn-primary" style='background-color: #016064; color:white;'>Follow</a>
+                    {% else %}
+                        <a href={% url 'unfollow' slug=user.slug %} class="btn btn-primary" style='background-color: #016064; color:red;'>Unfollow</a>
+                    {% endif %}
+                    {% else %}
+                        <a href='login/' class="btn btn-primary disabled" style='background-color: #016064; color:white;'>Follow</a>
+                        <a href='login/'>You have to log in to follow another user.</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
