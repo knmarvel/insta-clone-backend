@@ -3,6 +3,8 @@ from django.urls import reverse_lazy
 from django.http import Http404
 from datetime import datetime as dt
 from django.views import View
+
+from comments.models import Comments
 from insta_backend.models import Post
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView
@@ -26,7 +28,8 @@ class Homepage(View):
 def post_detail(request, id):
     html = "post_detail.html"
     post = Post.objects.get(id=id)
-    return render(request, html, {'post': post})
+    comments = Comments.objects.filter(commented_image=post)
+    return render(request, html, {'post': post, 'comments': comments})
 
 
 class PostAdd(LoginRequiredMixin, CreateView):
