@@ -6,6 +6,7 @@ from .models import Author, Profile
 from insta_backend.models import Post
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
+from django.views.generic.list import ListView
 
 
 
@@ -78,3 +79,18 @@ def profile_edit_view(request, slug):
         form = AuthorAdminChangeForm(instance=profile)
         context = {'form': form }
     return render(request, 'edit_profile.html', context)
+
+class SearchView(ListView):
+    model = Author
+    template_name = 'search.html'
+    context_object_name = 'search_results'
+
+    def get_queryset(self):
+       result = super(SearchView, self).get_queryset()
+       query = self.request.GET.get('search')
+       if query:
+          postresult = Author.objects.filter(username__contains=query)
+          result = postresult
+       else:
+           result = None
+       return result
