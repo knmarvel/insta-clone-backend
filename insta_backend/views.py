@@ -4,6 +4,8 @@ from django.http import Http404
 from django.template import RequestContext
 from datetime import datetime as dt
 from django.views import View
+
+from comments.models import Comments
 from insta_backend.models import Post
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView
@@ -26,11 +28,9 @@ class Homepage(View):
 
 def post_detail(request, id):
     html = "post_detail.html"
-    try: 
-        post = Post.objects.get(id=id)
-    except Post.DoesNotExist:
-        raise Http404("That post doesn't exist :(")
-    return render(request, html, {'post': post})
+    post = Post.objects.get(id=id)
+    comments = Comments.objects.filter(commented_image=post)
+    return render(request, html, {'post': post, 'comments': comments})
 
 
 class PostAdd(LoginRequiredMixin, CreateView):
