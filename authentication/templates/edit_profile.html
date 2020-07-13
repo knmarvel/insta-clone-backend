@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<h3>Edit Profile</h3>
+
 <div class="content-section">
 
   <form action="{% url 'edit_profile' slug=request.user.username %}" method="POST" enctype="multipart/form-data">{% csrf_token %}

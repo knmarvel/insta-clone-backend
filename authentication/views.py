@@ -6,7 +6,8 @@ from .models import Author, Profile
 from insta_backend.models import Post
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
-
+from django.views.generic.list import ListView
+from django.db.models import Q
 
 
 
@@ -69,7 +70,7 @@ def profile_edit_view(request, slug):
     user = Author.objects.get(username=slug)
     profile = Profile.objects.filter(user=user).first()
     if request.method == 'POST':
-        form = AuthorAdminChangeForm(request.POST, instance=profile)
+        form = AuthorAdminChangeForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
             print("the form should be saving now")
@@ -78,3 +79,27 @@ def profile_edit_view(request, slug):
         form = AuthorAdminChangeForm(instance=profile)
         context = {'form': form }
     return render(request, 'edit_profile.html', context)
+
+class SearchView(ListView):
+    model = Author
+    template_name = 'search.html'
+    context_object_name = 'search_results'
+
+    def get_queryset(self):
+       result = super(SearchView, self).get_queryset()
+       query = self.request.GET.get('search')
+       if query:
+          postresult = Author.objects.filter(username__contains=query)
+          result = postresult
+       else:
+           result = None
+       return result
+
+def search_view(request):
+    template = 'search.html'
+    query = request.GET.get('q')
+    results = Author.objects.filter(Q(username__icontains=query))
+    context = {
+        'results': results
+    }
+    return render(request, template, context)
