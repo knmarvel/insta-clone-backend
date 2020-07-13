@@ -22,8 +22,17 @@
         {% if post.author == request.user %}
         <a href="delete"><button>Delete this post</button></a>
         {% endif %}
+      <div class='commentsection'>
+          <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+              <input type='text'  id='cmnt' placeholder='Add a comment...'>
+              <span class='dot02'></span>
+                <input type="submit">
+    </form action>
+      </div>
         {% if post.likes.count > 0%}
-            Liked by: 
+            Liked by:
             <ul>
             {% for like in post.likes.all %}
                 <li><a href={% url 'profile' slug=like.slug %}>@{{like.username}}</a></li>
@@ -31,5 +40,17 @@
             </ul>
         {% endif %}
         <br>
+    {% for comment in comments %}
+      <span class="border border-secondary">
+    <div class="card">
+        <div class="card-body"><div class="shadow p-3 mb-5 bg-white rounded"><p class="user-select-all">Comments</p>
+
+
+    <h5>{{comment.comment_post}} <br> <sub>by {{comment.author}}</sub></h5></span>
+  </div></div>
+</div>
+    <br> {{ comment.comment_post }}
+    {% endfor %}
     </div>
+
 {% endblock %}

@@ -1,18 +1,11 @@
-import datetime as datetime
 from django.db import models
-from django.utils import timezone
-from datetime import datetime
-# Comment model:
-#     -text
-#     -author(foreign key)
-#     -post (foreign key)
-#     -datetime
 
 
 class Comments(models.Model):
-	text = models.TextField(max_length=250, blank=True, null=True)
-	author = models.ForeignKey('authentication.Author', on_delete=models.CASCADE)
-	post = models.ForeignKey('insta_backend.Post', on_delete=models.CASCADE)
-	datetime = datetime.now ()
-	timezone = timezone.now()
-	likes = models.ManyToManyField('insta_backend.Post',related_name='authors_who_like_this')
+	comment_post = models.CharField(max_length=150)
+	author = models.ForeignKey('authentication.Author', related_name='commenter', on_delete=models.CASCADE)
+	commented_image = models.ForeignKey('insta_backend.Post', on_delete=models.CASCADE)
+	date = models.DateTimeField(auto_now_add=True)
+
+	def __str__(self):
+		return self.author.username
