@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
+    {% if request.user.is_authenticated %}
     <div >
         <a href="post/add/"><button>Create a new post</button></a>
     </div>
+    {% endif %}
     <div class="feed" style="margin-bottom: 10rem;">
     <h1 class='display-4 mt-4 text-center'>Feed</h1>
     {% if posts %}
@@ -16,6 +18,8 @@
                 <a href="{% url 'post-like' pk=post.pk %}" class="card-link">
                     {% if post.likes.count > 0%}
                     {{post.likes.count}}
+                    {% else %}
+                    &nbsp;
                     {% endif %}
                     {% if request.user not in post.likes.all %}
                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-heart" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
