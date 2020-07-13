@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% block content%}
-<h1>search</h1>
+<h1 class='display-4' style='color: #016064'>Search Results</h1>
 {% for result in results%}
-   <a href={% url 'profile' slug=result.slug %}>{{result.username}}</a>
+   <li>
+      <a style='color: #016064' href={% url 'profile' slug=result.slug %}>{{result.username}}</a>
+   </li>
 {% endfor %}
 {% endblock %}

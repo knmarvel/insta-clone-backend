@@ -26,7 +26,7 @@
                     {% endif %}
                     {% else %}
                         <a href='login/' class="btn btn-primary disabled" style='background-color: #016064; color:white;'>Follow</a>
-                        <a href='login/'>You have to log in to follow another user.</a>
+                        <a href='/login/'>You have to log in to follow another user.</a>
                     {% endif %}
                 </div>
             </div>
@@ -39,7 +39,7 @@
                 {% load static %}
                     <img class="card-img-top" src="{{ post.image.url }}" style="object-fit: cover; height: 18rem;"/>
                     <div class="card-body text-center">
-                        <footer class="blockquote-footer" style='color:#016064;'>{{post.caption}}</footer>
+                        <a href={% url 'post_detail' id=post.id %}><footer class="blockquote-footer" style='color:#016064;'>{{post.caption}}</footer></a>
                     </div>
                 </div>
                 {% endfor %}
