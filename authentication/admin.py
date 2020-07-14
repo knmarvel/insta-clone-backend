@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .forms import AuthorAdminCreationForm, AuthorAdminChangeForm
-from .models import Author
+from .models import Author, Profile
 
 class AuthorAdmin(BaseUserAdmin):
     form = AuthorAdminChangeForm
@@ -27,4 +27,5 @@ class AuthorAdmin(BaseUserAdmin):
 
 
 admin.site.register(Author, AuthorAdmin)
+admin.site.register(Profile)
 admin.site.unregister(Group)

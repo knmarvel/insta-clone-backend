@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect, HttpResponseRedirect, reverse
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib.auth import authenticate, login, logout
-from .forms import RegisterForm, LoginForm
-from .models import Author
+from .forms import RegisterForm, LoginForm, ProfileEditForm, AuthorAdminChangeForm
+from .models import Author, Profile
 from insta_backend.models import Post
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
+from django.views.generic.list import ListView
+from django.db.models import Q
 
 
 
@@ -47,11 +49,71 @@ def logout_view(request):
     return redirect('login')
 
 def profile_view(request, slug):
-    profile = Author.objects.get(slug=slug)
-    print(profile)
-    posts = Post.objects.filter(author=profile)
+    
+    user = Author.objects.get(username=slug)
+    profile = Profile.objects.filter(user=user).first()
+    posts = Post.objects.filter(author=user)
+    
     context = {
             "profile": profile,
-            "posts":posts
+            "posts":posts,
+            "user": user
         }
+    if request.user.is_authenticated: 
+        logged_in_user = Author.objects.get(id=request.user.id)
+        is_following = logged_in_user.following.filter(username=slug).exists()
+        context["is_following"] = is_following
     return render(request, 'profile.html', context)
+
+@login_required
+def profile_edit_view(request, slug):
+    user = Author.objects.get(username=slug)
+    profile = Profile.objects.filter(user=user).first()
+    if request.method == 'POST':
+        form = AuthorAdminChangeForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            print("the form should be saving now")
+        return redirect('/')
+    else:
+        form = AuthorAdminChangeForm(instance=profile)
+        context = {'form': form }
+    return render(request, 'edit_profile.html', context)
+
+class SearchView(ListView):
+    model = Author
+    template_name = 'search.html'
+    context_object_name = 'search_results'
+
+    def get_queryset(self):
+       result = super(SearchView, self).get_queryset()
+       query = self.request.GET.get('search')
+       if query:
+          postresult = Author.objects.filter(username__contains=query)
+          result = postresult
+       else:
+           result = None
+       return result
+
+def search_view(request):
+    template = 'search.html'
+    query = request.GET.get('q')
+    results = Author.objects.filter(Q(username__icontains=query))
+    context = {
+        'results': results
+    }
+    return render(request, template, context)
+
+def follow_view(request, slug):
+    user_follow = Author.objects.get(username=slug)
+    logged_in_user = Author.objects.get(id=request.user.id)
+    logged_in_user.following.add(user_follow)
+    print(user_follow)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def unfollow_view(request, slug):
+    user_unfollow = Author.objects.get(username=slug)
+    logged_in_user = Author.objects.get(id=request.user.id)
+    logged_in_user.following.remove(user_unfollow)
+    print(user_unfollow)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
