@@ -1,10 +1,12 @@
-from django.shortcuts import render, reverse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, reverse, HttpResponseRedirect, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.http import Http404
 from django.template import RequestContext
 from datetime import datetime as dt
 from django.views import View
 
+from comments.forms import CommentForm
 from comments.models import Comments
 from insta_backend.models import Post
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -29,7 +31,7 @@ class Homepage(View):
 def post_detail(request, id):
     html = "post_detail.html"
     post = Post.objects.get(id=id)
-    comments = Comments.objects.filter(commented_image=post)
+    comments = Comments.objects.filter(posts=post)
     return render(request, html, {'post': post, 'comments': comments})
 
 
@@ -62,8 +64,9 @@ class PostDelete(LoginRequiredMixin, DeleteView):
 
 
 def post_toggle_like(request, pk):
-    try: 
+    try:
         post = Post.objects.get(id=pk)
+
     except Post.DoesNotExist:
         raise Http404("You can't like a post that doesn't exist :(")
     if request.user in post.likes.all():
@@ -86,3 +89,36 @@ def handler500(request, *args, **argv):
                       context_instance=RequestContext(request))
     response.status_code = 500
     return response
+
+
+def add_comment_to_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save()
+            comment.post = post
+            comment.save()
+            new_comment = Comments.objects.create(
+                posts=Post.objects.get(id=pk),
+                author=request.user,
+                text=comment.text)
+            print(new_comment)
+            return HttpResponseRedirect(request.GET.get('next', reverse('home')))
+    else:
+        form = CommentForm()
+    return render(request, "add_comment_to_post.html", {'form': form})
+
+
+@login_required
+def comment_approve(request, pk):
+    comments = get_object_or_404(Comments, pk=pk)
+    comments.approve()
+    return redirect('post_detail', pk=comments.post.pk)
+
+
+@login_required
+def comment_remove(request, pk):
+    comments = get_object_or_404(Comments, pk=pk)
+    comments.delete()
+    return redirect('post_detail.html', pk=comments.post.pk)

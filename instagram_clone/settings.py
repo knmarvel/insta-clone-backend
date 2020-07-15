@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    # 'django.contrib.staticfiles',
     'insta_backend',
     'authentication',
     'notification',
@@ -126,7 +126,7 @@ USE_TZ = True
 # STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 STATIC_URL = '/static/'
 # STATICFILES_DIRS = [
-#     './post_uploads',
+#     './media/post_uploads',
 # ]
 AUTH_USER_MODEL ='authentication.Author'
 LOGIN_URL = 'login'
