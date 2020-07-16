@@ -1,9 +1,14 @@
 {% extends 'base.html' %}
 {% block content%}
 <h1 class='display-4' style='color: #016064'>Search Results</h1>
-{% for result in results%}
+{% for result in author_results%}
    <li>
-      <a style='color: #016064' href={% url 'profile' slug=result.slug %}>{{result.username}}</a>
+      <a style='color: #016064' href={% url 'profile' slug=result.slug %}>@{{result.username}}</a>
+   </li>
+{% endfor %}
+{% for result in tag_results%}
+   <li>
+      <a style='color: #016064' href={% url 'tag_list' slug=result.slug %}>#{{result.text}}</a>
    </li>
 {% endfor %}
 {% endblock %}

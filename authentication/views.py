@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import RegisterForm, LoginForm, ProfileEditForm, AuthorAdminChangeForm
 from .models import Author, Profile
 from insta_backend.models import Post
+from tags.models import Tag
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django.views.generic.list import ListView
@@ -91,21 +92,24 @@ class SearchView(ListView):
     context_object_name = 'search_results'
 
     def get_queryset(self):
-       result = super(SearchView, self).get_queryset()
-       query = self.request.GET.get('search')
-       if query:
-          postresult = Author.objects.filter(username__contains=query)
-          result = postresult
-       else:
-           result = None
-       return result
+        result = super(SearchView, self).get_queryset()
+        query = self.request.GET.get('search')
+        if query:
+            postresult = Author.objects.filter(username__contains=query)
+            result = postresult
+        else:
+            result = None
+        return result
+
 
 def search_view(request):
     template = 'search.html'
     query = request.GET.get('q')
-    results = Author.objects.filter(Q(username__icontains=query))
+    author_results = Author.objects.filter(Q(username__icontains=query))
+    tag_results = Tag.objects.filter(text__icontains=query)
     context = {
-        'results': results
+        'author_results': author_results,
+        'tag_results': tag_results
     }
     return render(request, template, context)
 
