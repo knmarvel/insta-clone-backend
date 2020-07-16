@@ -39,7 +39,7 @@
                 {% load static %}
                     <img class="card-img-top" src="{{ post.image.url }}" style="object-fit: cover; height: 18rem;"/>
                     <div class="card-body text-center">
-                        <a href={% url 'post_detail' id=post.id %}><footer class="blockquote-footer" style='color:#016064;'>{{post.caption}}</footer></a>
+                        <a href={% url 'post_detail' id=post.id %}><footer class="blockquote-footer" style='color:#016064;'>{{post.caption|safe}}</footer></a>
                     </div>
                 </div>
                 {% endfor %}
