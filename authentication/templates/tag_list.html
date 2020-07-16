@@ -1,14 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
-    {% if request.user.is_authenticated %}
-        {% if request.GET.dict.filter != "all"%}
-            <a href="?filter=all">See all posts</a>
-        {% else %}
-            <a href="/">Only see posts of users you follow.</a>
-        {% endif %}
-    {% endif %}
+
     <div class="feed" style="margin-bottom: 10rem;">
-    <h1 class='display-4 mt-4 text-center' style="color: #016064;">The Feed</h1>
+    <h1 class='display-4 mt-4 text-center' style="color: #016064;">Posts with that tag</h1>
     {% if posts %}
         <div class="card-columns">
         {% for post in posts %}
@@ -42,9 +36,9 @@
         {% else %}
         <div class="card" style="width: 18rem;">
             <h5 class="card-title"> :( </h5>
-            <p> No one you're following has any posts </p>
+            <p> There are no posts with that tag </p>
         </div>
     {% endif %}
     </div>
-    </div>
-{% endblock %}
+
+{% endblock%}
