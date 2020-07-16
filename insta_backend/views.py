@@ -28,7 +28,7 @@ class Homepage(View):
 
     def get(self, request):
         posts = None
-        if request.user.is_authenticated:
+        if request.user.is_authenticated and not request.GET.dict():
             posts = Post.objects.filter(
                 author__in=request.user.following.all())
         else:

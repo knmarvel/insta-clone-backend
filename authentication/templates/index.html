@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
     {% if request.user.is_authenticated %}
+        {% if request.GET.dict.filter != "all"%}
+            <a href="?filter=all">See all posts</a>
+        {% else %}
+            <a href="/">Only see posts of users you follow.</a>
+        {% endif %}
     {% endif %}
     <div class="feed" style="margin-bottom: 10rem;">
     <h1 class='display-4 mt-4 text-center' style="color: #016064;">The Feed</h1>
