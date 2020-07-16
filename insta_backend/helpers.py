@@ -9,11 +9,11 @@ def check_for_tags(text, post_id):
     if "#" or "@" in text:
         tag_re = r'\B#\w*[a-zA-Z]+\w*'
         for tag in set(re.findall(tag_re, text)):
-            selected_tag = Tag.objects.get_or_create(text=tag)[0]
+            selected_tag = Tag.objects.get_or_create(text=tag[1:])[0]
             tagged_post = Post.objects.get(id=post_id)
             selected_tag.post.add(tagged_post)
             selected_tag.save()
-            new_tag = f"<a href='/tag/{tag}'>{tag}</a>"
+            new_tag = f"<a href='/tag/{tag[1:]}'>{tag}</a>"
             text = text.replace(tag, new_tag)
         user_re = r'\B@\w*[a-zA-Z]+\w*'
         for username in set(re.findall(user_re, text)):
