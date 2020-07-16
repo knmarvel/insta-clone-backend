@@ -1,5 +1,11 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, reverse, HttpResponseRedirect, redirect, get_object_or_404
+from django.shortcuts import (
+    render,
+    reverse,
+    HttpResponseRedirect,
+    redirect,
+    get_object_or_404
+)
 from django.urls import reverse_lazy
 from django.http import Http404
 from django.template import RequestContext
@@ -10,7 +16,6 @@ from django.views import View
 from comments.forms import CommentForm
 from comments.models import Comments
 from insta_backend.models import Post
-from tags.models import Tag
 from insta_backend.helpers import check_for_tags
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -42,7 +47,6 @@ def post_detail(request, id):
 class PostAdd(LoginRequiredMixin, CreateView):
     model = Post
     fields = ['image', 'caption']
-
 
     def form_valid(self, form):
         """Gives the user authorship of the new post,
@@ -89,7 +93,7 @@ def post_toggle_like(request, pk):
 
 
 def handler404(request, *args, **argv):
-    responst = render(request, '404.html', {},
+    response = render(request, '404.html', {},
                       context_instance=RequestContext(request))
     response.status_code = 404
     return response
@@ -115,7 +119,8 @@ def add_comment_to_post(request, pk):
                 author=request.user,
                 text=comment.text)
             print(new_comment)
-            return HttpResponseRedirect(request.GET.get('next', reverse('home')))
+            return HttpResponseRedirect(request.GET.get('next',
+                                                        reverse('home')))
     else:
         form = CommentForm()
     return render(request, "add_comment_to_post.html", {'form': form})
