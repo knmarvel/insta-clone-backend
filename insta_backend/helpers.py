@@ -3,6 +3,7 @@ from tags.models import Tag
 from authentication.models import Author
 from insta_backend.models import Post
 
+
 def check_for_tags(text, post_id):
     """Checks text string for captions and returns html for words"""
     if "#" or "@" in text:
@@ -17,5 +18,6 @@ def check_for_tags(text, post_id):
         user_re = r'\B@\w*[a-zA-Z]+\w*'
         for username in set(re.findall(user_re, text)):
             user = Author.objects.get(username=username[1:])
-            text = text.replace(username, f"<a href='/user/{username[1:]}'>@{username[1:]}</a>")
+            new_username = f"<a href='/user/{username[1:]}'>@{username[1:]}</a>"
+            text = text.replace(username, new_username)
     return text
