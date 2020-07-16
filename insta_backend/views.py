@@ -6,9 +6,13 @@ from django.template import RequestContext
 from datetime import datetime as dt
 from django.views import View
 
+
 from comments.forms import CommentForm
 from comments.models import Comments
 from insta_backend.models import Post
+from tags.models import Tag
+from insta_backend.helpers import check_for_tags
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView
 
@@ -39,11 +43,18 @@ class PostAdd(LoginRequiredMixin, CreateView):
     model = Post
     fields = ['image', 'caption']
 
+
     def form_valid(self, form):
-        """Gives the user authorship of the new post"""
+        """Gives the user authorship of the new post,
+        checks for timestamp and tags"""
         form.instance.author = self.request.user
         form.instance.creation_timestamp = dt.now()
-        return super().form_valid(form)
+        created_request = super().form_valid(form)
+        new_post = self.object
+        # breakpoint()
+        new_post.caption = check_for_tags(new_post.caption, new_post.id)
+        new_post.save()
+        return created_request
 
     def get_success_url(self):
         """Sends user back to homepage after post"""
