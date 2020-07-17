@@ -43,20 +43,23 @@ def login_view(request):
                 return HttpResponseRedirect(request.GET.get('next', reverse('home')))
     form = LoginForm()
     return render(request, 'login.html', {'form': form})
+
+
 def logout_view(request):
-    
+
     auth.logout(request)
     return redirect('login')
 
+
 def profile_view(request, slug):
-    
+
     user = Author.objects.get(username=slug)
     profile = Profile.objects.filter(user=user).first()
     posts = Post.objects.filter(author=user)
     
     context = {
             "profile": profile,
-            "posts":posts,
+            "posts": posts,
             "user": user
         }
     if request.user.is_authenticated: 
@@ -64,6 +67,7 @@ def profile_view(request, slug):
         is_following = logged_in_user.following.filter(username=slug).exists()
         context["is_following"] = is_following
     return render(request, 'profile.html', context)
+
 
 @login_required
 def profile_edit_view(request, slug):
@@ -79,6 +83,7 @@ def profile_edit_view(request, slug):
         form = AuthorAdminChangeForm(instance=profile)
         context = {'form': form }
     return render(request, 'edit_profile.html', context)
+
 
 class SearchView(ListView):
     model = Author

@@ -4,7 +4,7 @@
     {% load static %}
         <img class="card-img-top" src="{{ post.image.url }}"/>
         <h5 class="card-title">@<a href={% url 'profile' slug=post.author.slug %}>{{ post.author.username }}</a>, {{ post.created_timestamp }}</h5>
-        <p class="card-text">"{{ post.caption }}"</p>
+        <p class="card-text">{{ post.caption|safe }}</p>
         {% if request.user.is_authenticated %}
         <a href="post/{{post.id}}/like/?next={{request.path}}" class="card-link">
         {% else %}
