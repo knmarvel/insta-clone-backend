@@ -7,7 +7,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-
 class AuthorManager(BaseUserManager):
     def create_user(self, email, name, username, password=None):
         if not email:

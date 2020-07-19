@@ -10,30 +10,45 @@
     <div class="feed" style="margin-bottom: 10rem;">
     <h1 class='display-4 mt-4 text-center' style="color: #016064;">The Feed</h1>
     {% if posts %}
-        <div class="card-columns">
+        <div>
         {% for post in posts %}
             <a href={% url 'post_detail' id=post.id %}>
-            <div class="card" style="width: 18rem;">
+            <div class="card" style="width: 45rem;">
             {% load static %}
-                <img class="card-img-top" style="object-fit: cover; height: 18rem;" src="{{ post.image.url }}"/>
-                <h5 class="lead card-title"><a style="color: #016064" href={% url 'profile' slug=post.author.slug %}>@{{ post.author.username }}</a></h5>
-                <p class="card-text">"{{ post.caption|safe}}"</p>
-                <footer class="blockquote-footer">{{ post.created_timestamp }}</footer>
-                <a href="{% url 'post-like' pk=post.pk %}" class="card-link">
+                <h5 class="lead card-title mx-4">
+                    <a style="color: #016064" href={% url 'profile' slug=post.author.slug %}>@{{ post.author.username }}</a>
+                </h5>
+                <img class="card-img mx-auto" style="width: 40rem;" src="{{ post.image.url }}"/>
+                <p class="card-text mx-4">"{{ post.caption|safe}}"</p>
+                <footer class="blockquote-footer mx-4">{{ post.created_timestamp }}</footer>
+                {% if request.user.is_authenticated %}
+                <a href="{% url 'post-like' pk=post.pk %}" class="card-link mx-4">
                     {% if post.likes.count > 0%}
-                    {{post.likes.count}}
+                        {{post.likes.count}}
                     {% else %}
-                    &nbsp;
+                        &nbsp;
                     {% endif %}
                     {% if request.user not in post.likes.all %}
-                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-heart" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-                    </svg>
+                        <svg style="vertical-align: middle;" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-heart" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                        </svg>
                     {% else %}
-                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-heart-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-                    </svg>
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-heart-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                        </svg>
                     {% endif %}
+                {% else %}
+                    <a href="/login" class="card-link mx-4">
+                        {% if post.likes.count > 0%}
+                            {{post.likes.count}}
+                        {% else %}
+                            &nbsp;
+                        {% endif %}
+                        <svg style="vertical-align: middle;" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-heart" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                        </svg>
+                    </a>
+                {% endif %}
                 </a>
                 <br>
             </div>
