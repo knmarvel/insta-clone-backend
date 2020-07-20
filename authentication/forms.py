@@ -1,10 +1,16 @@
 from django import forms
-from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import (
+    ReadOnlyPasswordHashField,
+    UserCreationForm,
+    UserChangeForm
+)
 from .models import Author, Profile
+
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=100)
     password = forms.CharField(widget=forms.PasswordInput)
+
 
 class RegisterForm(UserCreationForm):
     class Meta:
@@ -13,8 +19,8 @@ class RegisterForm(UserCreationForm):
             'name',
             'username',
             'email',
-            
         ]
+
 
 class ProfileEditForm(forms.ModelForm):
     class Meta:
@@ -23,9 +29,11 @@ class ProfileEditForm(forms.ModelForm):
 
 
 class AuthorAdminCreationForm(forms.ModelForm):
-
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+    password2 = forms.CharField(
+        label='Password confirmation',
+        widget=forms.PasswordInput
+        )
 
     class Meta:
         model = Author
@@ -37,7 +45,7 @@ class AuthorAdminCreationForm(forms.ModelForm):
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("Passwords don't match")
         return password2
-    
+
     def save(self, commit=True):
         author = super(AuthorAdminCreationForm, self).save(commit=False)
         author.set_password(self.cleaned_data["password1"])
@@ -45,12 +53,10 @@ class AuthorAdminCreationForm(forms.ModelForm):
             author.save()
         return author
 
+
 class AuthorAdminChangeForm(UserChangeForm):
     password = ReadOnlyPasswordHashField()
 
     class Meta:
         model = Profile
         exclude = ('user', 'password')
-    
-    
-

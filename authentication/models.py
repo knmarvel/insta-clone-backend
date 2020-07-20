@@ -17,13 +17,13 @@ class AuthorManager(BaseUserManager):
             raise ValueError('Users must have a username')
         author = self.model(
             email=self.normalize_email(email),
-            name = name,
-            username = username
+            name=name,
+            username=username
         )
         author.set_password(password)
         author.save(using=self._db)
         return author
-    
+
     def create_staffuser(self, email, name, username, password):
         author = self.create_user(
             email,
@@ -49,7 +49,6 @@ class AuthorManager(BaseUserManager):
 
 
 class Author(AbstractBaseUser):
-    
     name = models.CharField(max_length=50)
     username = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(null=False, unique=True)
@@ -57,8 +56,6 @@ class Author(AbstractBaseUser):
     active = models.BooleanField(default=True)
     staff = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)
-    
-    
     following = models.ManyToManyField(
         'self',
         related_name="following"
@@ -69,7 +66,7 @@ class Author(AbstractBaseUser):
 
     def __str__(self):
         return self.name
-    
+
     def has_perm(self, perm, obj=None):
         return True
 
@@ -90,7 +87,7 @@ class Author(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.staff
-    
+
     @property
     def is_admin(self):
         return self.admin
@@ -101,23 +98,39 @@ class Author(AbstractBaseUser):
 
     objects = AuthorManager()
 
+
 class Profile(models.Model):
-    user = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='profile')
+    user = models.ForeignKey(
+        Author,
+        on_delete=models.CASCADE,
+        related_name='profile'
+        )
     bio = models.TextField(max_length=280, blank=True)
     website = models.URLField(blank=True, null=True)
     gender = models.CharField(max_length=20, blank=True, null=True)
-    profile_picture = models.ImageField(null=True, blank=True, default='default.png', upload_to='profile_uploads')
+    profile_picture = models.ImageField(
+        null=True,
+        blank=True,
+        default='default.png',
+        upload_to='profile_uploads'
+        )
     location = models.CharField(max_length=30, blank=True, null=True)
-    birthdate = models.DateField(auto_now=False, auto_now_add=False, null=True, blank=True)
+    birthdate = models.DateField(
+        auto_now=False,
+        auto_now_add=False,
+        null=True,
+        blank=True
+        )
 
     def __str__(self):
         return self.user.name
-    
+
 
 @receiver(post_save, sender=Author)
 def create_author_profile(sender, instance, created, **kwargs):
     if created:
-        profile = Profile.objects.create(user=instance)
+        Profile.objects.create(user=instance)
+
 
 @receiver(post_save, sender=Author)
 def save_author_profile(sender, instance, created, **kwargs):
@@ -125,4 +138,3 @@ def save_author_profile(sender, instance, created, **kwargs):
     if created:
         profile = Profile(user=user)
         profile.save()
-    

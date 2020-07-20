@@ -43,16 +43,13 @@
  
         <div class="container">
             <div class="row">
-                <div class="col-8 d-flex justify-content-center" >
                     {% block content %}
                     {% endblock %}
-                </div>
-                <div class="col-sm-auto d-flex align-left"/>
                 <div class="col d-flex mt-5 align-left">
                     <div>
                     {% if request.user.is_authenticated %}
                         <div>
-                            <a class="nav-item nav-link" href="{% url 'profile' slug=request.user.slug%}">@{{request.user.slug}}</a>
+                            <a href="{% url 'profile' slug=request.user.slug%}">@{{request.user.slug}}</a>
                             <p>{{request.user.name}}</p>
                         </div>
                     {% endif %}
