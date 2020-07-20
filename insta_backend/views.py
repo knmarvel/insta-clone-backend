@@ -20,7 +20,9 @@ from insta_backend.helpers import check_for_tags
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView
-
+from notification.models import Notification
+from authentication.models import Author
+import re
 
 # Create your views here.
 class Homepage(View):
@@ -36,6 +38,17 @@ class Homepage(View):
         posts = posts.order_by('-created_timestamp')
         return render(request, self.html, {'posts': posts})
 
+
+def notification_alert(post):
+    mention_pattern = r'\B#\w*[a-zA-Z]+\w*'
+    tag = re.match(mention_pattern, post.caption)
+    if tag:
+        tagged_user = Author.objects.get(username=username)
+        Notification.objects.create(
+            creator=request.user,
+            to=tagged_user,
+            post=post
+        )
 
 def post_detail(request, id):
     html = "post_detail.html"
@@ -58,6 +71,7 @@ class PostAdd(LoginRequiredMixin, CreateView):
         # breakpoint()
         new_post.caption = check_for_tags(new_post.caption, new_post.id)
         new_post.save()
+        notification_alert(new_post.caption)
         return created_request
 
     def get_success_url(self):
@@ -138,3 +152,4 @@ def comment_remove(request, pk):
     comments = get_object_or_404(Comments, pk=pk)
     comments.delete()
     return redirect('post_detail.html', pk=comments.post.pk)
+
