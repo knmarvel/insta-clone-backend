@@ -55,7 +55,6 @@ class PostAdd(LoginRequiredMixin, CreateView):
         form.instance.creation_timestamp = dt.now()
         created_request = super().form_valid(form)
         new_post = self.object
-        # breakpoint()
         new_post.caption = check_for_tags(new_post.caption, new_post.id)
         new_post.save()
         return created_request

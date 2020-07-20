@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .forms import AuthorAdminCreationForm, AuthorAdminChangeForm
 from .models import Author, Profile
 
+
 class AuthorAdmin(BaseUserAdmin):
     form = AuthorAdminChangeForm
     add_form = AuthorAdminCreationForm
@@ -18,8 +19,9 @@ class AuthorAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('name', 'username', 'email', 'password1', 'password2')}
-        ),
+            'fields': ('name', 'username', 'email', 'password1', 'password2')
+            }
+         ),
     )
     search_fields = ('email',)
     ordering = ('username',)

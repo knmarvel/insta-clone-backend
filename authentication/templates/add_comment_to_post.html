@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
-
 {% block content %}
-    <h1>New comment</h1>
+<div class="col d-flex mt-5 align-left" > &nbsp; </div>
+<div class="feed" style="margin-bottom: 10rem;">
+  <h1>New comment</h1>
   <form method="post" style="margin-top: 1.3em;">
-          {{ form.as_p }}
-          {% csrf_token %}
-          <button type="submit" class="btn btn-primary  btn-lg">Submit</button>
-        </form>
-    </form>
+        {{ form.as_p }}
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary  btn-lg">Submit</button>
+      </form>
+  </form>
+</div>
 {% endblock %}
