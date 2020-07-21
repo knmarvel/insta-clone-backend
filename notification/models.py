@@ -13,7 +13,7 @@ class Notification(models.Model):
     to = models.ForeignKey(Author, related_name='to', on_delete=models.CASCADE)
     notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
     post = models.ForeignKey(Post, default='None', on_delete=models.CASCADE)
+    seen = models.BooleanField(default=False)
     
-
     def __str__(self):
         return '{} - {}'.format(self.notification_type, self.post)

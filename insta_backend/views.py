@@ -23,7 +23,7 @@ from django.views.generic.edit import CreateView, DeleteView
 from notification.models import Notification
 from authentication.models import Author
 import re
-
+from .helpers import notify_helper
 # Create your views here.
 class Homepage(View):
     html = "index.html"
@@ -39,16 +39,16 @@ class Homepage(View):
         return render(request, self.html, {'posts': posts})
 
 
-def notification_alert(post):
-    mention_pattern = r'\B#\w*[a-zA-Z]+\w*'
-    tag = re.match(mention_pattern, post.caption)
-    if tag:
-        tagged_user = Author.objects.get(username=username)
-        Notification.objects.create(
-            creator=request.user,
-            to=tagged_user,
-            post=post
-        )
+# def notification_alert(post):
+#     mention_pattern = r'\B#\w*[a-zA-Z]+\w*'
+#     tag = re.match(mention_pattern, post)
+#     if tag:
+#         tagged_user = Author.objects.get(username=username)
+#         Notification.objects.create(
+#             creator=request.user,
+#             to=tagged_user,
+#             post=post
+#         )
 
 def post_detail(request, id):
     html = "post_detail.html"
@@ -70,8 +70,9 @@ class PostAdd(LoginRequiredMixin, CreateView):
         new_post = self.object
         # breakpoint()
         new_post.caption = check_for_tags(new_post.caption, new_post.id)
+        
         new_post.save()
-        notification_alert(new_post.caption)
+        
         return created_request
 
     def get_success_url(self):
@@ -102,6 +103,8 @@ def post_toggle_like(request, pk):
         post.likes.remove(request.user)
     else:
         post.likes.add(request.user)
+        notify_helper(request.user, post, 'like')
+        
     post.save()
     return HttpResponseRedirect(request.GET.get('next', reverse('home')))
 
@@ -132,6 +135,7 @@ def add_comment_to_post(request, pk):
                 posts=Post.objects.get(id=pk),
                 author=request.user,
                 text=comment.text)
+            notify_helper(request.user, post, 'commente')
             print(new_comment)
             return HttpResponseRedirect(request.GET.get('next',
                                                         reverse('home')))

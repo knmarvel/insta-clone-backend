@@ -1,5 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+
 {% csrf_token %}
-<h1>Notifications</h1>
+
 {% for notification in notifications %}
- <li>{{notification.creator}} {{notification.notification_type}}d</li>
+ <li class='mt-4'>{{notification.creator}} {{notification.notification_type}}d {{notification.post}}</li>
 {% endfor %}
+
+{% endblock %}

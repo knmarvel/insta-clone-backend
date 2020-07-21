@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserCreationForm, UserChangeForm
 from .models import Author, Profile
-
+from django.forms import DateField
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=100)
     password = forms.CharField(widget=forms.PasswordInput)
@@ -17,10 +17,12 @@ class RegisterForm(UserCreationForm):
         ]
 
 class ProfileEditForm(forms.ModelForm):
+    birthdate = DateField(input_formats=["%d %B"])
+    password = None
     class Meta:
         model = Profile
         fields = ['bio', 'website', 'gender', 'profile_picture', 'birthdate']
-
+        exclude = ('password',)
 
 class AuthorAdminCreationForm(forms.ModelForm):
 
@@ -46,7 +48,7 @@ class AuthorAdminCreationForm(forms.ModelForm):
         return author
 
 class AuthorAdminChangeForm(UserChangeForm):
-    password = ReadOnlyPasswordHashField()
+    password = None
 
     class Meta:
         model = Profile
