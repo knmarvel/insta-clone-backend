@@ -1,10 +1,5 @@
 from django import forms
 
-from comments.models import Comments
 
-
-class CommentForm(forms.ModelForm):
-
-    class Meta:
-        model = Comments
-        fields = ('author', 'text',)
+class CommentForm(forms.Form):
+    text = forms.CharField(max_length=500)
