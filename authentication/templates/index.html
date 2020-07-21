@@ -57,17 +57,24 @@
                             </div>
                         {% endif %}
                         <br/>
-                        <div class='commentsection'>
-                            <a class="btn btn-default" href="/post/{{post.id}}/add_comment_to_post/?next=/post/{{post.id}}/">Add comment</a>
-                    </div>
+                        
+                            <div class='commentsection'>
+                                {% if request.user.is_authenticated %}
+                                    <a class="btn btn-default" href="/post/{{post.id}}/add_comment_to_post/?next={{request.path}}">Add comment</a>
+                                {% else %}
+                                    <a class="btn btn-default" href="/login/?next=/post/{{post.id}}/add_comment_to_post/">Add comment</a>
+                                {% endif %}
+                            </div>
+ 
             </div>
                 {% endfor %}
             
-
-            <div class="card" style="width: 45rem;">
-                <h5 class="card-title"> :( </h5>
-                <p> No one you're following has any posts </p>
-            </div>
+            {% if not posts %}
+                <div class="card" style="width: 45rem;">
+                    <h5 class="card-title"> :( </h5>
+                    <p> No one you're following has any posts </p>
+                </div>
+            {% endif %}
     </div>
     </div>
 {% endblock %}
