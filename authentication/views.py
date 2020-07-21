@@ -55,11 +55,13 @@ def profile_view(request, slug):
     user = Author.objects.get(username=slug)
     profile = Profile.objects.filter(user=user).first()
     posts = Post.objects.filter(author=user)
+    followers = Author.objects.filter(following=user)
 
     context = {
             "profile": profile,
             "posts": posts,
-            "user": user
+            "user": user,
+            "followers": followers,
         }
     if request.user.is_authenticated:
         logged_in_user = Author.objects.get(id=request.user.id)
@@ -113,3 +115,12 @@ def unfollow_view(request, slug):
     logged_in_user.following.remove(user_unfollow)
     print(user_unfollow.username)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def all_users_view(request):
+    template = 'all_users.html'
+    users = Author.objects.all().order_by('username')
+    context = {
+        'users': users,
+    }
+    return render(request, template, context)

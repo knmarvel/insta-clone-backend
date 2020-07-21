@@ -15,19 +15,47 @@
                     <p class="card-text">Location: {{profile.location}}</p>
                     <p class="card-text">Birthday: {{profile.birthdate}}</p>
                     {% if request.user.is_authenticated %}
-                    {% if request.user.username == user.slug %}
-                        <a href={% url 'edit_profile' slug=request.user.username%} class="btn btn-primary" style='background-color: #016064'>Edit Profile</a>
-                                          
-                    {% endif %}
-                    {% if not is_following %}
-                       <a href={% url 'follow' slug=user.slug %} class="btn btn-primary" style='background-color: #016064; color:white;'>Follow</a>
+                        {% if request.user.username == user.slug %}
+                            <a href={% url 'edit_profile' slug=request.user.username%} class="btn btn-primary" style='background-color: #016064'>Edit Profile</a>        
+                        {% endif %}
+                        {% if not is_following %}
+                            <a href={% url 'follow' slug=user.slug %} class="btn btn-primary" style='background-color: #016064; color:white;'>Follow</a>
+                        {% else %}
+                            {% if not request.user.username == user.slug %}
+                                <a href={% url 'unfollow' slug=user.slug %} class="btn btn-primary" style='background-color: #016064; color:red;'>Unfollow</a>
+                            {% endif %}
+                        {% endif %}
                     {% else %}
-                        <a href={% url 'unfollow' slug=user.slug %} class="btn btn-primary" style='background-color: #016064; color:red;'>Unfollow</a>
+                        <a href='/login/?next=/user/{{user.slug}}/' class="btn btn-primary disabled" style='background-color: #016064; color:white;'>Follow</a>
                     {% endif %}
-                    {% else %}
-                        <a href='/login/' class="btn btn-primary disabled" style='background-color: #016064; color:white;'>Follow</a>
-                        <a href='/login/'>You have to log in to follow another user.</a>
-                    {% endif %}
+                    <div class="following">
+                        <p class="card-title">
+                        <b>Following</b>
+                        </p>
+                        <ul class="list-group">
+                            {% for following in user.following.all %}
+                                {% if request.user != following %}
+                                <li class="list-group-item list-group-item-action">
+                                    <a href="{% url 'profile' slug=following.slug %}">@{{following.slug}}</a>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="followers">
+                        <p class="card-title">
+                        <b>Followers</b>
+                        </p>
+                        <ul class="list-group">
+                            {% for follower in followers %}
+                                {% if request.user != follower %}
+                                <li class="list-group-item list-group-item-action">
+                                    <a href="{% url 'profile' slug=follower.slug %}">@{{follower.slug}}</a>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -44,6 +72,14 @@
                 </div>
                 {% endfor %}
                 {% endif %}
+                <br/>
+                <div class='commentsection'>
+                    {% if request.user.is_authenticated %}
+                        <a class="btn btn-default" href="/post/{{post.id}}/add_comment_to_post/?next={{request.path}}">Add comment</a>
+                    {% else %}
+                        <a class="btn btn-default" href="/login/?next=/post/{{post.id}}/add_comment_to_post/">Add comment</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

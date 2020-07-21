@@ -25,6 +25,8 @@ from authentication.models import Author
 import re
 from .helpers import notify_helper
 # Create your views here.
+
+
 class Homepage(View):
     html = "index.html"
 
@@ -53,7 +55,7 @@ class Homepage(View):
 def post_detail(request, id):
     html = "post_detail.html"
     post = Post.objects.get(id=id)
-    comments = Comments.objects.filter(posts=post)
+    comments = Comments.objects.filter(posts=post).order_by('-created_date')
     return render(request, html, {'post': post, 'comments': comments})
 
 
@@ -69,9 +71,7 @@ class PostAdd(LoginRequiredMixin, CreateView):
         created_request = super().form_valid(form)
         new_post = self.object
         new_post.caption = check_for_tags(new_post.caption, new_post.id)
-        
         new_post.save()
-        
         return created_request
 
     def get_success_url(self):
@@ -102,8 +102,7 @@ def post_toggle_like(request, pk):
         post.likes.remove(request.user)
     else:
         post.likes.add(request.user)
-        notify_helper(request.user, post, 'like')
-        
+        notify_helper(request.user, post, 'like')   
     post.save()
     return HttpResponseRedirect(request.GET.get('next', reverse('home')))
 
@@ -122,19 +121,17 @@ def handler500(request, *args, **argv):
     return response
 
 
+@login_required
 def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
-            comment = form.save()
-            comment.post = post
-            comment.save()
-            new_comment = Comments.objects.create(
-                posts=Post.objects.get(id=pk),
+            comment = Comments.objects.create(
+                posts=post,
                 author=request.user,
                 text=comment.text)
-            notify_helper(request.user, post, 'commente')
+            notify_helper(request.user, post, 'comment')
             print(new_comment)
             return HttpResponseRedirect(request.GET.get('next',
                                                         reverse('home')))
@@ -153,6 +150,6 @@ def comment_approve(request, pk):
 @login_required
 def comment_remove(request, pk):
     comments = get_object_or_404(Comments, pk=pk)
+    post = comments.posts
     comments.delete()
-    return redirect('post_detail.html', pk=comments.post.pk)
-
+    return redirect('post_detail', id=post.id)
