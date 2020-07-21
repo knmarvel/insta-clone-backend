@@ -18,13 +18,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 env = environ.Env(
     # set casting, default value
-    DEBUG=(bool, False)
 )
 # reading .env file
 environ.Env.read_env()
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
-DEBUG = env('DEBUG')
+DEBUG = False
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
 
@@ -34,7 +33,7 @@ SECRET_KEY = env('SECRET_KEY')
 if DEBUG:
     ALLOWED_HOSTS = ["*"]
 else:
-    ALLOWED_HOSTS = ['46.101.187.9']
+    ALLOWED_HOSTS = ['127.0.0.1', '206.189.235.79']
 
 # Application definition
 
@@ -130,12 +129,12 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-# PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-# STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = [
-#     './media/post_uploads',
-# ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'insta_static'),
+]
 AUTH_USER_MODEL = 'authentication.Author'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
