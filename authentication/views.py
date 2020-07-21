@@ -53,7 +53,7 @@ def logout_view(request):
 
 def profile_view(request, slug):
 
-    user = Author.objects.get(username=slug)
+    user = Author.objects.get(slug=slug)
     profile = Profile.objects.filter(user=user).first()
     posts = Post.objects.filter(author=user)
     followers = Author.objects.filter(following=user)
@@ -66,14 +66,14 @@ def profile_view(request, slug):
         }
     if request.user.is_authenticated:
         logged_in_user = Author.objects.get(id=request.user.id)
-        is_following = logged_in_user.following.filter(username=slug).exists()
+        is_following = logged_in_user.following.filter(slug=slug).exists()
         context["is_following"] = is_following
     return render(request, 'profile.html', context)
 
 
 @login_required
 def profile_edit_view(request, slug):
-    user = Author.objects.get(username=slug)
+    user = Author.objects.get(slug=slug)
     profile = Profile.objects.filter(user=user).first()
     if request.method == 'POST':
         form = AuthorAdminChangeForm(
@@ -101,7 +101,7 @@ def search_view(request):
 
 
 def follow_view(request, slug):
-    user_follow = Author.objects.get(username=slug)
+    user_follow = Author.objects.get(slug=slug)
     logged_in_user = Author.objects.get(username=request.user.username)
     logged_in_user.following.add(user_follow)
     notify_follow_helper(logged_in_user, user_follow, 'follow')
@@ -111,7 +111,7 @@ def follow_view(request, slug):
 
 
 def unfollow_view(request, slug):
-    user_unfollow = Author.objects.get(username=slug)
+    user_unfollow = Author.objects.get(slug=slug)
     logged_in_user = Author.objects.get(id=request.user.id)
     logged_in_user.following.remove(user_unfollow)
     print(user_unfollow.username)
