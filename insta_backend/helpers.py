@@ -18,11 +18,10 @@ def notify_follow_helper(creator, to, type):
         creator=creator,
         to=to,
         notification_type=type,
-        new_user=new_user,
         seen=False
     )
 
-def check_for_tags(text, post_id):
+def check_for_tags(text, post_id, creator):
     """Checks text string for captions and returns html for words"""
     if "#" or "@" in text:
         tag_re = r'\B#\w*[a-zA-Z]+\w*'
@@ -36,7 +35,8 @@ def check_for_tags(text, post_id):
         user_re = r'\B@\w*[a-zA-Z]+\w*'
         for username in set(re.findall(user_re, text)):
             user = Author.objects.get(username=username[1:])
-            
+            post = Post.objects.get(id=post_id)
+            notify_helper(creator, post, 'mention')
             new_username = f"<a href='/user/{username[1:]}'>{username}</a>"
             text = text.replace(username, new_username)
     return text

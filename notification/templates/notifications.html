@@ -1,12 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
-
+<div class="col d-flex mt-5 align-left" >
+        &nbsp; 
+</div>
+<div class="feed" style="margin-bottom: 10rem;">
 {% csrf_token %}
 
 {% for notification in notifications %}
+
 <ul>
- <li class='mt-4'>{{notification.creator}} {{notification.notification_type}}d {{notification.post}}</li>
+{% if notification.notification_type == 'like'%}
+<li class='mt-4'><a href='/user/{{notification.creator.username}}/'>{{notification.creator}}</a> {{notification.notification_type}}d <a href='/post/{{notification.post.id}}/'>{{notification.post}}</a></li>
+{% elif notification.notification_type == 'comment' %}
+<li class='mt-4'><a href='/user/{{notification.creator.username}}/'>{{notification.creator}}</a> {{notification.notification_type}}ed on <a href='/post/{{notification.post.id}}/'>{{notification.post}}</a></li>
+{% elif notification.notification_type == 'mention' %}
+<li class='mt-4'><a href='/user/{{notification.creator.username}}/'>{{notification.creator}}</a> {{notification.notification_type}}ed you in <a href='/post/{{notification.post.id}}/'>{{notification.post}}</a></li>
+{% elif notification.notification_type == 'follow' %}
+<li class='mt-4'><a href='/user/{{notification.creator.username}}/'>{{notification.creator}}</a> {{notification.notification_type}}ed you</li>
+{% endif %}
 </ul>
 {% endfor %}
+</div>
 
 {% endblock %}
