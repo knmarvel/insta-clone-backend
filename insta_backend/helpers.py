@@ -35,10 +35,11 @@ def check_for_tags(text, post_id, creator):
         user_re = r'\B@\w*[a-zA-Z]+\w*'
         for username in set(re.findall(user_re, text)):
             user = Author.objects.get(username=username[1:])
-            post = Post.objects.get(id=post_id)
-            notify_helper(creator, post, 'mention')
-            new_username = f"<a href='/user/{username[1:]}'>{username}</a>"
-            text = text.replace(username, new_username)
+            if user:
+                post = Post.objects.get(id=post_id)
+                notify_helper(creator, post, 'mention')
+                new_username = f"<a href='/user/{username[1:]}'>{username}</a>"
+                text = text.replace(username, new_username)
     return text
 
 
