@@ -41,17 +41,6 @@ class Homepage(View):
         return render(request, self.html, {'posts': posts})
 
 
-# def notification_alert(post):
-#     mention_pattern = r'\B#\w*[a-zA-Z]+\w*'
-#     tag = re.match(mention_pattern, post)
-#     if tag:
-#         tagged_user = Author.objects.get(username=username)
-#         Notification.objects.create(
-#             creator=request.user,
-#             to=tagged_user,
-#             post=post
-#         )
-
 def post_detail(request, id):
     html = "post_detail.html"
     post = Post.objects.get(id=id)
@@ -70,7 +59,7 @@ class PostAdd(LoginRequiredMixin, CreateView):
         form.instance.creation_timestamp = dt.now()
         created_request = super().form_valid(form)
         new_post = self.object
-        new_post.caption = check_for_tags(new_post.caption, new_post.id)
+        new_post.caption = check_for_tags(new_post.caption, new_post.id, self.request.user)
         new_post.save()
         return created_request
 
@@ -130,9 +119,9 @@ def add_comment_to_post(request, pk):
             comment = Comments.objects.create(
                 posts=post,
                 author=request.user,
-                text=comment.text)
+                text=request.POST.get('text'))
             notify_helper(request.user, post, 'comment')
-            print(new_comment)
+            
             return HttpResponseRedirect(request.GET.get('next',
                                                         reverse('home')))
     else:

@@ -10,7 +10,8 @@ from .views import (
     unfollow_view,
     all_users_view
 )
-
+from notification.views import notification_view
+from notification.urls import urlpatterns as notif_urls
 urlpatterns = [
     path(
         'user/<str:slug>/edit_profile/',
@@ -26,3 +27,4 @@ urlpatterns = [
     path('register/', register_view, name='register'),
     path('users/', all_users_view, name="all_users"),
 ]
+urlpatterns += notif_urls
