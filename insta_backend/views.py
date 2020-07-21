@@ -111,14 +111,11 @@ def add_comment_to_post(request, pk):
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
-            form.fields['author'] = request.user
-            comment = form.save()
-            comment.post = post
-            comment.save()
             comment = Comments.objects.create(
-                posts=Post.objects.get(id=pk),
+                posts=post,
                 author=request.user,
-                text=comment.text)
+                text=request.POST.get('text'))
+            print(comment)
             return HttpResponseRedirect(request.GET.get('next',
                                                         reverse('home')))
     else:

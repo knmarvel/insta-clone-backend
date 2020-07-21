@@ -60,7 +60,7 @@
                         
                             <div class='commentsection'>
                                 {% if request.user.is_authenticated %}
-                                    <a class="btn btn-default" href="/post/{{post.id}}/add_comment_to_post/?next={{request.path}}">Add comment</a>
+                                    <a class="btn btn-default" href="/post/{{post.id}}/add_comment_to_post/?next=/post/{{post.id}}/">Add comment</a>
                                 {% else %}
                                     <a class="btn btn-default" href="/login/?next=/post/{{post.id}}/add_comment_to_post/">Add comment</a>
                                 {% endif %}
