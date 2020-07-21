@@ -130,12 +130,12 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-# PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-# STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = [
-#     './media/post_uploads',
-# ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'insta_static'),
+]
 AUTH_USER_MODEL = 'authentication.Author'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
