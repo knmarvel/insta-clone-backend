@@ -113,3 +113,12 @@ def unfollow_view(request, slug):
     logged_in_user.following.remove(user_unfollow)
     print(user_unfollow)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def all_users_view(request):
+    template = 'all_users.html'
+    users = Author.objects.all().order_by('username')
+    context = {
+        'users': users,
+    }
+    return render(request, template, context)

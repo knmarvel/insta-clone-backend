@@ -53,6 +53,17 @@
                             <p>{{request.user.name}}</p>
                         </div>
                     {% endif %}
+                    <ul class="list-group">
+                        <h5>
+                        Explore
+                        </h5>
+                        <li class="list-group-item list-group-item-action">
+                            <a href="{% url 'all_users'%}">All Users</a>
+                        </li>
+                        <li class="list-group-item list-group-item-action">
+                            <a href="{% url 'all_tags'%}">All Tags</a>
+                        </li>
+                    </ul>
                     <p class='mt-2' style='color: #016064;'>2020 | About | Kenzie Academy</p>
                     </div>
                 </div>
