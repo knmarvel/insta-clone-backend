@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 from .views import Homepage, post_detail, PostAdd, PostDelete, post_toggle_like,add_comment_to_post, comment_remove, \
     comment_approve
-from notification.urls import urlpatterns as notif_urls
+
 urlpatterns = [
     path('', Homepage.as_view(), name='home'),
     path("post/<int:id>/", post_detail, name="post_detail"),
@@ -17,4 +17,3 @@ urlpatterns = [
     path('comment/<int:pk>/approve/', comment_approve, name='comment_approve'),
     path('comment/<int:pk>/remove/', comment_remove, name='comment_remove'),
 ]
-urlpatterns += notif_urls
