@@ -1,18 +1,21 @@
 {% extends 'base.html'%}
 {% block content %}
-<h1 class='display-3 text-center mt-4' style='color: #016064'>Login</h1>
-<div class="container-fluid">
-    <center>
-        <div class='mr-6'>
-            <form method="POST" style='color: #016064'>
-            
-                {% csrf_token %}
-                    {{form.as_p}}
-                    <button style="background-color:#016064; color:white" class="btn btn-outline-info" type="submit">Login</button>
-            </div>
-            </form>
-        Don't have an account? <a href="/register" target="blank"><strong style='color: #016064'>register here</strong></a>!
-    </center>
+<div class="col d-flex mt-5 align-left" > &nbsp; </div>
+<div class="feed" style="margin-bottom: 10rem;">
+    <h1 class='display-3 text-center mt-4' style='color: #016064'>Login</h1>
+    <div class="container-fluid">
+        <center>
+            <div class='mr-6'>
+                <form method="POST" style='color: #016064'>
+                
+                    {% csrf_token %}
+                        {{form.as_p}}
+                        <button style="background-color:#016064; color:white" class="btn btn-outline-info" type="submit">Login</button>
+                </div>
+                </form>
+            Don't have an account? <a href="/register"><strong style='color: #016064'>register here</strong></a>!
+        </center>
+    </div>
 </div>
 
 {% endblock %}

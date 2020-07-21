@@ -1,5 +1,4 @@
 from django.db import models
-from django.template.defaultfilters import slugify
 
 
 # Create your models here.
@@ -17,12 +16,14 @@ class Post(models.Model):
         blank=True,
         related_name="authors_who_like_this"
         )
-    comments = models.ManyToManyField('authentication.Author', blank=True, related_name="authors_who_commented_this")
+    comments = models.ManyToManyField(
+        'authentication.Author',
+        blank=True,
+        related_name="authors_who_commented_this"
+        )
 
     def approved_comments(self):
         return self.comments.filter(approved_comment=True)
 
     def __str__(self):
         return f"{self.author.name} Pic {self.id}"
-
-
