@@ -55,11 +55,13 @@ def profile_view(request, slug):
     user = Author.objects.get(username=slug)
     profile = Profile.objects.filter(user=user).first()
     posts = Post.objects.filter(author=user)
+    followers = Author.objects.filter(following=user)
 
     context = {
             "profile": profile,
             "posts": posts,
-            "user": user
+            "user": user,
+            "followers": followers,
         }
     if request.user.is_authenticated:
         logged_in_user = Author.objects.get(id=request.user.id)
