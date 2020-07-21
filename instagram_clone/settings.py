@@ -24,7 +24,7 @@ env = environ.Env(
 environ.Env.read_env()
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
-DEBUG = env('DEBUG')
+DEBUG = True
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
 
@@ -34,7 +34,7 @@ SECRET_KEY = env('SECRET_KEY')
 if DEBUG:
     ALLOWED_HOSTS = ["*"]
 else:
-    ALLOWED_HOSTS = ['46.101.187.9']
+    ALLOWED_HOSTS = ['127.0.0.1', '46.101.187.9']
 
 # Application definition
 
