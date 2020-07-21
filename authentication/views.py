@@ -111,10 +111,5 @@ def unfollow_view(request, slug):
     user_unfollow = Author.objects.get(username=slug)
     logged_in_user = Author.objects.get(id=request.user.id)
     logged_in_user.following.remove(user_unfollow)
-<<<<<<< HEAD
     print(user_unfollow.username)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-=======
-    print(user_unfollow)
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
->>>>>>> 3c9833f3f5eb4a2b04061cf3cef2be909156de7f

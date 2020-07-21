@@ -5,12 +5,7 @@ from django.contrib.auth.forms import (
     UserChangeForm
 )
 from .models import Author, Profile
-<<<<<<< HEAD
 from django.forms import DateField
-=======
-
-
->>>>>>> 3c9833f3f5eb4a2b04061cf3cef2be909156de7f
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=100)
     password = forms.CharField(widget=forms.PasswordInput)
