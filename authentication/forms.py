@@ -22,7 +22,7 @@ class RegisterForm(UserCreationForm):
 
 
 class ProfileEditForm(forms.ModelForm):
-    birthdate = DateField(input_formats=["%d %B"])
+    birthdate = DateField(input_formats=["%d/%B"])
     password = None
     class Meta:
         model = Profile
