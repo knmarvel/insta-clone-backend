@@ -4,7 +4,9 @@
 {% csrf_token %}
 
 {% for notification in notifications %}
+<ul>
  <li class='mt-4'>{{notification.creator}} {{notification.notification_type}}d {{notification.post}}</li>
+</ul>
 {% endfor %}
 
 {% endblock %}
