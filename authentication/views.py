@@ -7,7 +7,7 @@ from tags.models import Tag
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-
+from insta_backend.helpers import notify_helper, notify_follow_helper
 
 def register_view(request):
     if request.method == 'POST':
@@ -80,7 +80,7 @@ def profile_edit_view(request, slug):
         if form.is_valid():
             form.save()
             print("the form should be saving now")
-        return redirect('/')
+        return redirect('/user/'+slug)
     else:
         form = AuthorAdminChangeForm(instance=profile)
         context = {'form': form}
@@ -103,7 +103,9 @@ def follow_view(request, slug):
     user_follow = Author.objects.get(username=slug)
     logged_in_user = Author.objects.get(id=request.user.id)
     logged_in_user.following.add(user_follow)
-    print(user_follow)
+    # notify_follow_helper(logged_in_user.username, user_follow.username, 'follow')
+    print(logged_in_user.username)
+    print(user_follow.username)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -111,7 +113,7 @@ def unfollow_view(request, slug):
     user_unfollow = Author.objects.get(username=slug)
     logged_in_user = Author.objects.get(id=request.user.id)
     logged_in_user.following.remove(user_unfollow)
-    print(user_unfollow)
+    print(user_unfollow.username)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 

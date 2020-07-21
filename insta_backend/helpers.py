@@ -2,7 +2,25 @@ import re
 from tags.models import Tag
 from authentication.models import Author
 from insta_backend.models import Post
+from notification.models import Notification
 
+
+def notify_helper(creator, post, type):
+    notify = Notification.objects.create(
+            creator=creator,
+            to=post.author,
+            notification_type=type,
+            post=post,
+            seen=False
+        )
+def notify_follow_helper(creator, to, type):
+    notify = Notification.objects.create(
+        creator=creator,
+        to=to,
+        notification_type=type,
+        new_user=new_user,
+        seen=False
+    )
 
 def check_for_tags(text, post_id):
     """Checks text string for captions and returns html for words"""
@@ -18,6 +36,9 @@ def check_for_tags(text, post_id):
         user_re = r'\B@\w*[a-zA-Z]+\w*'
         for username in set(re.findall(user_re, text)):
             user = Author.objects.get(username=username[1:])
+            
             new_username = f"<a href='/user/{username[1:]}'>{username}</a>"
             text = text.replace(username, new_username)
     return text
+
+

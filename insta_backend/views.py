@@ -20,9 +20,13 @@ from insta_backend.helpers import check_for_tags
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView
-
-
+from notification.models import Notification
+from authentication.models import Author
+import re
+from .helpers import notify_helper
 # Create your views here.
+
+
 class Homepage(View):
     html = "index.html"
 
@@ -36,6 +40,17 @@ class Homepage(View):
         posts = posts.order_by('-created_timestamp')
         return render(request, self.html, {'posts': posts})
 
+
+# def notification_alert(post):
+#     mention_pattern = r'\B#\w*[a-zA-Z]+\w*'
+#     tag = re.match(mention_pattern, post)
+#     if tag:
+#         tagged_user = Author.objects.get(username=username)
+#         Notification.objects.create(
+#             creator=request.user,
+#             to=tagged_user,
+#             post=post
+#         )
 
 def post_detail(request, id):
     html = "post_detail.html"
@@ -87,6 +102,7 @@ def post_toggle_like(request, pk):
         post.likes.remove(request.user)
     else:
         post.likes.add(request.user)
+        notify_helper(request.user, post, 'like')   
     post.save()
     return HttpResponseRedirect(request.GET.get('next', reverse('home')))
 
@@ -114,8 +130,9 @@ def add_comment_to_post(request, pk):
             comment = Comments.objects.create(
                 posts=post,
                 author=request.user,
-                text=request.POST.get('text'))
-            print(comment)
+                text=comment.text)
+            notify_helper(request.user, post, 'comment')
+            print(new_comment)
             return HttpResponseRedirect(request.GET.get('next',
                                                         reverse('home')))
     else:
