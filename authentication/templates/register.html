@@ -1,18 +1,21 @@
 {% extends 'base.html'%}
 {% block content %}
-<h1 class='display-3 text-center mt-4' style='color: #016064;'>Register</h1>
-<div class="container-fluid">
-    <div class='card' style='color: #016064; background-color: #e9ebee; border-color: #e9ebee'>
-        
-        <div class='card-body mx-auto' style="max-width: 400px;">
-            <form method="POST">
-                {% csrf_token %}
-                    {{form.as_p}}
-                    <button style="background-color: #016064; color:white" class="btn btn-outline-info" type="submit">Register</button>
-                    Have an account? <a style='color: #016064' href="/login" target="blank"><strong>login here</strong></a>!
-            </form>
-        
-        
+<div class="col d-flex mt-5 align-left" > &nbsp; </div>
+<div class="feed" style="margin-bottom: 10rem;">
+    <h1 class='display-3 text-center mt-4' style='color: #016064;'>Register</h1>
+    <div class="container-fluid">
+        <div class='card' style='color: #016064; background-color: #e9ebee; border-color: #e9ebee'>
+            
+            <div class='card-body mx-auto' style="max-width: 400px;">
+                <form method="POST">
+                    {% csrf_token %}
+                        {{form.as_p}}
+                        <button style="background-color: #016064; color:white" class="btn btn-outline-info" type="submit">Register</button>
+                        Have an account? <a style='color: #016064' href="/login" target="blank"><strong>login here</strong></a>!
+                </form>
+            
+            
+            </div>
         </div>
     </div>
 </div>
