@@ -37,16 +37,28 @@
                 </ul>
             {% endif %}
             <br>
+        <p class="user-select-all">Comments</p>
         {% for comment in comments %}
-        <span class="border border-secondary">
-        <div class="card">
-            <div class="card-body"><div class="shadow p-3 mb-5 bg-white rounded"><p class="user-select-all">Comments</p>
-
-
-        <h5>{{comment.text}} <br> <sub>by {{comment.author}}</sub></h5></span>
-    </div>
-    </div>
-    </div>
+            <span class="border border-secondary">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="shadow p-3 mb-5 bg-white rounded">
+                            <h5>
+                                {{comment.text}}
+                            </h5>
+                                by <a href="{% url 'profile' slug=comment.author.slug %}">@{{comment.author}}</a>, {{comment.created_date}}
+                                {% if request.user == comment.author %}
+                                    <a href="{% url 'comment_remove' pk=comment.pk %}">
+                                        <button>
+                                            Delete this comment
+                                        </button>
+                                    </a>
+                                {% endif %}
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </span>
         {% endfor %}
         </div>
 </div>

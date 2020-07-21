@@ -7,4 +7,4 @@ class CommentForm(forms.ModelForm):
 
     class Meta:
         model = Comments
-        fields = ('author', 'text',)
+        fields = ('author', 'text', )

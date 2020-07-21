@@ -40,7 +40,7 @@ class Homepage(View):
 def post_detail(request, id):
     html = "post_detail.html"
     post = Post.objects.get(id=id)
-    comments = Comments.objects.filter(posts=post)
+    comments = Comments.objects.filter(posts=post).order_by('-created_date')
     return render(request, html, {'post': post, 'comments': comments})
 
 
@@ -105,19 +105,20 @@ def handler500(request, *args, **argv):
     return response
 
 
+@login_required
 def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
+            form.fields['author'] = request.user
             comment = form.save()
             comment.post = post
             comment.save()
-            new_comment = Comments.objects.create(
+            comment = Comments.objects.create(
                 posts=Post.objects.get(id=pk),
                 author=request.user,
                 text=comment.text)
-            print(new_comment)
             return HttpResponseRedirect(request.GET.get('next',
                                                         reverse('home')))
     else:
@@ -135,5 +136,6 @@ def comment_approve(request, pk):
 @login_required
 def comment_remove(request, pk):
     comments = get_object_or_404(Comments, pk=pk)
+    post = comments.posts
     comments.delete()
-    return redirect('post_detail.html', pk=comments.post.pk)
+    return redirect('post_detail', id=post.id)
