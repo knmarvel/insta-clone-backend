@@ -34,7 +34,7 @@ SECRET_KEY = env('SECRET_KEY')
 if DEBUG:
     ALLOWED_HOSTS = ["*"]
 else:
-    ALLOWED_HOSTS = ['127.0.0.1', '46.101.187.9']
+    ALLOWED_HOSTS = ['127.0.0.1', '206.189.235.79']
 
 # Application definition
 
