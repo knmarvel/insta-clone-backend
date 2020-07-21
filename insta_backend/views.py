@@ -132,7 +132,6 @@ def add_comment_to_post(request, pk):
 @login_required
 def comment_approve(request, pk):
     comments = get_object_or_404(Comments, pk=pk)
-    comments.approve()
     return redirect('post_detail', pk=comments.post.pk)
 
 
