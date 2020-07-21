@@ -1,17 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
     {% if request.user.is_authenticated %}
+        {% if request.GET.dict.filter != "all"%}
+            <a href="?filter=all">See all posts</a>
+        {% else %}
+            <a href="/">Only see posts of users you follow.</a>
+        {% endif %}
     {% endif %}
     <div class="feed" style="margin-bottom: 10rem;">
     <h1 class='display-4 mt-4 text-center' style="color: #016064;">The Feed</h1>
     {% if posts %}
         <div class="card-columns">
         {% for post in posts %}
+            <a href={% url 'post_detail' id=post.id %}>
             <div class="card" style="width: 18rem;">
             {% load static %}
                 <img class="card-img-top" style="object-fit: cover; height: 18rem;" src="{{ post.image.url }}"/>
-                <h5 class="lead card-title">@<a style="color: #016064" href={% url 'profile' slug=post.author.slug %}>{{ post.author.username }}</a></h5>
-                <p class="card-text"><a href={% url 'post_detail' id=post.id %}>"{{ post.caption|slice:":20" }}{% if post.caption.count > 20 %}...view more{%endif%}"</a></p>
+                <h5 class="lead card-title"><a style="color: #016064" href={% url 'profile' slug=post.author.slug %}>@{{ post.author.username }}</a></h5>
+                <p class="card-text">"{{ post.caption|safe}}"</p>
                 <footer class="blockquote-footer">{{ post.created_timestamp }}</footer>
                 <a href="{% url 'post-like' pk=post.pk %}" class="card-link">
                     {% if post.likes.count > 0%}
@@ -31,6 +37,7 @@
                 </a>
                 <br>
             </div>
+            </a>
         {% endfor %}
         {% else %}
         <div class="card" style="width: 18rem;">

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'authentication',
     'notification',
     'comments',
+    'tags',
     'bootstrap4',
 ]
 
@@ -55,7 +56,6 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -134,7 +134,7 @@ STATIC_URL = '/static/'
 # STATICFILES_DIRS = [
 #     './media/post_uploads',
 # ]
-AUTH_USER_MODEL ='authentication.Author'
+AUTH_USER_MODEL = 'authentication.Author'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGOUT_REDIRECT_URL = 'login'

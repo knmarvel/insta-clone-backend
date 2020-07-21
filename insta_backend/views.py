@@ -1,17 +1,28 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, reverse, HttpResponseRedirect, redirect, get_object_or_404
+from django.shortcuts import (
+    render,
+    reverse,
+    HttpResponseRedirect,
+    redirect,
+    get_object_or_404
+)
 from django.urls import reverse_lazy
 from django.http import Http404
 from django.template import RequestContext
 from datetime import datetime as dt
 from django.views import View
 
+
 from comments.forms import CommentForm
 from comments.models import Comments
 from insta_backend.models import Post
+from insta_backend.helpers import check_for_tags
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView
-
+from notification.models import Notification
+from authentication.models import Author
+import re
 
 # Create your views here.
 class Homepage(View):
@@ -19,7 +30,7 @@ class Homepage(View):
 
     def get(self, request):
         posts = None
-        if request.user.is_authenticated:
+        if request.user.is_authenticated and not request.GET.dict():
             posts = Post.objects.filter(
                 author__in=request.user.following.all())
         else:
@@ -27,6 +38,17 @@ class Homepage(View):
         posts = posts.order_by('-created_timestamp')
         return render(request, self.html, {'posts': posts})
 
+
+def notification_alert(post):
+    mention_pattern = r'\B#\w*[a-zA-Z]+\w*'
+    tag = re.match(mention_pattern, post.caption)
+    if tag:
+        tagged_user = Author.objects.get(username=username)
+        Notification.objects.create(
+            creator=request.user,
+            to=tagged_user,
+            post=post
+        )
 
 def post_detail(request, id):
     html = "post_detail.html"
@@ -40,10 +62,17 @@ class PostAdd(LoginRequiredMixin, CreateView):
     fields = ['image', 'caption']
 
     def form_valid(self, form):
-        """Gives the user authorship of the new post"""
+        """Gives the user authorship of the new post,
+        checks for timestamp and tags"""
         form.instance.author = self.request.user
         form.instance.creation_timestamp = dt.now()
-        return super().form_valid(form)
+        created_request = super().form_valid(form)
+        new_post = self.object
+        # breakpoint()
+        new_post.caption = check_for_tags(new_post.caption, new_post.id)
+        new_post.save()
+        notification_alert(new_post.caption)
+        return created_request
 
     def get_success_url(self):
         """Sends user back to homepage after post"""
@@ -78,7 +107,7 @@ def post_toggle_like(request, pk):
 
 
 def handler404(request, *args, **argv):
-    responst = render(request, '404.html', {},
+    response = render(request, '404.html', {},
                       context_instance=RequestContext(request))
     response.status_code = 404
     return response
@@ -104,7 +133,8 @@ def add_comment_to_post(request, pk):
                 author=request.user,
                 text=comment.text)
             print(new_comment)
-            return HttpResponseRedirect(request.GET.get('next', reverse('home')))
+            return HttpResponseRedirect(request.GET.get('next',
+                                                        reverse('home')))
     else:
         form = CommentForm()
     return render(request, "add_comment_to_post.html", {'form': form})
@@ -122,3 +152,4 @@ def comment_remove(request, pk):
     comments = get_object_or_404(Comments, pk=pk)
     comments.delete()
     return redirect('post_detail.html', pk=comments.post.pk)
+

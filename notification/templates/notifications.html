@@ -1,0 +1,5 @@
+{% csrf_token %}
+<h1>Notifications</h1>
+{% for notification in notifications %}
+ <li>{{notification.creator}} {{notification.notification_type}}d</li>
+{% endfor %}
