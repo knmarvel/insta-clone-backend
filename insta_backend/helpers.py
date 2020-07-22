@@ -47,4 +47,3 @@ def check_for_tags(text, post_id, creator):
                 text = text.replace(username, new_username)
     return text
 
-

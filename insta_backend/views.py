@@ -20,9 +20,6 @@ from insta_backend.helpers import check_for_tags
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView
-from notification.models import Notification
-from authentication.models import Author
-import re
 from .helpers import notify_helper
 # Create your views here.
 
@@ -59,7 +56,8 @@ class PostAdd(LoginRequiredMixin, CreateView):
         form.instance.creation_timestamp = dt.now()
         created_request = super().form_valid(form)
         new_post = self.object
-        new_post.caption = check_for_tags(new_post.caption, new_post.id, self.request.user)
+        new_post.caption = check_for_tags(
+            new_post.caption, new_post.id, self.request.user)
         new_post.save()
         return created_request
 
