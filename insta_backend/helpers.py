@@ -13,6 +13,9 @@ def notify_helper(creator, post, type):
             post=post,
             seen=False
         )
+    return notify
+
+
 def notify_follow_helper(creator, to, type):
     notify = Notification.objects.create(
         creator=creator,
@@ -20,6 +23,8 @@ def notify_follow_helper(creator, to, type):
         notification_type=type,
         seen=False
     )
+    return notify
+
 
 def check_for_tags(text, post_id, creator):
     """Checks text string for captions and returns html for words"""

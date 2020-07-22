@@ -7,7 +7,7 @@ from tags.models import Tag
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from insta_backend.helpers import notify_helper, notify_follow_helper
+from insta_backend.helpers import notify_follow_helper
 
 
 def register_view(request):
@@ -105,8 +105,6 @@ def follow_view(request, slug):
     logged_in_user = Author.objects.get(username=request.user.username)
     logged_in_user.following.add(user_follow)
     notify_follow_helper(logged_in_user, user_follow, 'follow')
-    print(logged_in_user.username)
-    print(user_follow.username)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
