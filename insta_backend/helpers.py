@@ -5,10 +5,10 @@ from insta_backend.models import Post
 from notification.models import Notification
 
 
-def notify_helper(creator, post, type):
+def notify_helper(creator, to, post, type):
     notify = Notification.objects.create(
             creator=creator,
-            to=post.author,
+            to=to,
             notification_type=type,
             post=post,
             seen=False
@@ -42,8 +42,7 @@ def check_for_tags(text, post_id, creator):
             user = Author.objects.get(username=username[1:])
             if user:
                 post = Post.objects.get(id=post_id)
-                notify_helper(creator, post, 'mention')
+                notify_helper(creator, user, post, 'mention')
                 new_username = f"<a href='/user/{username[1:]}'>{username}</a>"
                 text = text.replace(username, new_username)
     return text
-

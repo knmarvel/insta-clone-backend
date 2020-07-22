@@ -89,7 +89,7 @@ def post_toggle_like(request, pk):
         post.likes.remove(request.user)
     else:
         post.likes.add(request.user)
-        notify_helper(request.user, post, 'like')   
+        notify_helper(request.user, post.author, post, 'like')   
     post.save()
     return HttpResponseRedirect(request.GET.get('next', reverse('home')))
 
@@ -118,7 +118,7 @@ def add_comment_to_post(request, pk):
                 posts=post,
                 author=request.user,
                 text=request.POST.get('text'))
-            notify_helper(request.user, post, 'comment')
+            notify_helper(request.user, post.author, post, 'comment')
             
             return HttpResponseRedirect(request.GET.get('next',
                                                         reverse('home')))

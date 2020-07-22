@@ -4,7 +4,7 @@ from authentication.models import Author
 from insta_backend.models import Post
 
 def notification_view(request):
-    notifications = list(Notification.objects.filter(to=request.user))
+    notifications = Notification.objects.filter(to=request.user)
     user = Author.objects.get(username=request.user.username)
     
     posts = Post.objects.filter(author=user).order_by('-created_timestamp')
