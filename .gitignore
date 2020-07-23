@@ -5,3 +5,5 @@
 static/
 *.pyc
 db.sqlite3
+media/
+
