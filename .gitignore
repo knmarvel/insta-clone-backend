@@ -4,4 +4,4 @@
 .env
 static/
 *.pyc
-
+db.sqlite
