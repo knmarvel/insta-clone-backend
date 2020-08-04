@@ -1,4 +1,4 @@
 .vscode
 .venv
 .idea
-.env
+instagram_clone/.env
